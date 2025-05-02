@@ -19,29 +19,26 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
     return Transaction(
       id: fields[0] as String?,
       amount: fields[1] as double,
-      isExpense: fields[2] as bool,
-      category: fields[3] as String,
-      date: fields[4] as DateTime,
-      note: fields[5] as String?,
+      currency: fields[2] as String,
+      category: fields[3] as Category,
+      occurredAt: fields[4] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Transaction obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.amount)
       ..writeByte(2)
-      ..write(obj.isExpense)
+      ..write(obj.currency)
       ..writeByte(3)
       ..write(obj.category)
       ..writeByte(4)
-      ..write(obj.date)
-      ..writeByte(5)
-      ..write(obj.note);
+      ..write(obj.occurredAt);
   }
 
   @override

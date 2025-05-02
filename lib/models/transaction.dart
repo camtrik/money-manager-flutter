@@ -1,37 +1,31 @@
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
+import 'category.dart';
 
 part 'transaction.g.dart';
 
 @HiveType(typeId: 0)
 class Transaction {
   @HiveField(0)
-  final String id;
+  final String id; // 唯一标识
 
   @HiveField(1)
-  double amount;
+  final double amount; // 金额
 
   @HiveField(2)
-  bool isExpense;
+  final String currency; // 币种："CNY" 或 "JPY"
 
   @HiveField(3)
-  String category;
+  final Category category; // 关联分类对象
 
   @HiveField(4)
-  DateTime date;
-
-  @HiveField(5)
-  String? note;
+  final DateTime occurredAt; // 发生时间
 
   Transaction({
     String? id,
     required this.amount,
-    required this.isExpense,
+    required this.currency,
     required this.category,
-    required this.date,
-    this.note,
-  }) : this.id = id ?? const Uuid().v4();
-
-  // + or - depending on expense or income
-  String get sign => isExpense ? '-' : '+';
+    required this.occurredAt,
+  }) : id = id ?? const Uuid().v4();
 }

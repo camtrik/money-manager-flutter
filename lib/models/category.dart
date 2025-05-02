@@ -15,5 +15,5 @@ class Category {
   String icon;
 
   Category({String? id, required this.name, required this.icon})
-    : this.id = id ?? const Uuid().v4();
+    : id = id ?? const Uuid().v4();
 }
