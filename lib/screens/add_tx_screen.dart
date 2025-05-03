@@ -56,7 +56,7 @@ class _AddTxScreenState extends State<AddTxScreen> {
                       .toList(),
               onChanged: (v) => setState(() => _currency = v!),
             ),
-
+   
             // —— 修复后的分类下拉 ——
             DropdownButton<Category>(
               value: _category,

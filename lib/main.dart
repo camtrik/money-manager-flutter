@@ -1,23 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/screens/tx_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/services/storage_service.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
-import 'package:money_manager/screens/home_screen.dart';
+import 'package:money_manager/screens/category_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await StorageService.init();
+  await StorageService.init(); // 初始化 Hive 本地存储
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _currentIndex = 0;
+
+  // 底部导航对应的页面列表
+  static const List<Widget> _pages = <Widget>[
+    CategoryScreen(),
+    TransactionScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      // 全局注入交易状态 ViewModel
       create: (_) => TxListModel(),
-      child: MaterialApp(title: '记账应用', home: const HomeScreen()),
+      child: MaterialApp(
+        title: '记账应用',
+        home: Scaffold(
+          body: _pages[_currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.pie_chart),
+                label: '类别',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                label: '交易',
+              ),
+            ],
+            onTap: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        ),
+      ),
     );
   }
 }

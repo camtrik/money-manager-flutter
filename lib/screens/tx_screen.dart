@@ -4,8 +4,8 @@ import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/screens/add_tx_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class TransactionScreen extends StatelessWidget {
+  const TransactionScreen({Key? key}) : super(key: key);
 
   // 把 DateTime 转成 "YYYY/MM/DD"
   String _formatDate(DateTime date) {
