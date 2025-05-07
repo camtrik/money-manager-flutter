@@ -25,7 +25,6 @@ class CategoryScreen extends StatelessWidget {
     int i = 0;
     sums.forEach((id, total) {
       final c = cats[id]!;
-      // 不同分类用不同颜色
       final color = Colors.primaries[i % Colors.primaries.length];
       sections.add(PieChartSectionData(
         value: total,
@@ -42,14 +41,12 @@ class CategoryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 16),
-          // 总支出
           Text(
             '本月支出：¥${sums.values.fold(0.0, (a, b) => a + b).toStringAsFixed(0)}',
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
-          // 分类图标网格
           Wrap(
             spacing: 24,
             runSpacing: 16,

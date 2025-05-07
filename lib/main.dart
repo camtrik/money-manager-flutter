@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/screens/tx_screen.dart';
+import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/services/storage_service.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/screens/category_screen.dart';
 
 void main() async {
+  // await Hive.deleteBoxFromDisk('categories');
+
   WidgetsFlutterBinding.ensureInitialized();
   await StorageService.init(); // 初始化 Hive 本地存储
   runApp(const MyApp());
@@ -29,9 +33,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      // 全局注入交易状态 ViewModel
-      create: (_) => TxListModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CategoryListModel()),
+        ChangeNotifierProvider(create: (_) => TxListModel()),
+      ],
       child: MaterialApp(
         title: '记账应用',
         home: Scaffold(

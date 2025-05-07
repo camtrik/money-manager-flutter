@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 
 class AddTxScreen extends StatefulWidget {
-  const AddTxScreen({Key? key}) : super(key: key);
+  final Category? initialCategory;
+  const AddTxScreen({Key? key, this.initialCategory}) : super(key: key);
 
   @override
   State<AddTxScreen> createState() => _AddTxScreenState();
@@ -14,40 +16,35 @@ class AddTxScreen extends StatefulWidget {
 class _AddTxScreenState extends State<AddTxScreen> {
   final _amtCtrl = TextEditingController();
   String _currency = 'CNY';
+  Category? _category;
 
-  // 这里一次性生成并复用这三个实例
-  final List<Category> categories = [
-    Category(name: '餐饮', icon: '🍽️'),
-    Category(name: '交通', icon: '🚌'),
-    Category(name: '购物', icon: '🛍️'),
-  ];
-
-  late Category _category;
   DateTime _date = DateTime.now();
 
   @override
-  void initState() {
-    super.initState();
-    // 初始选中第一个分类
-    _category = categories.first;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final categories = context.watch<CategoryListModel>().all;
+
+    // If categories not loaded yet, show a loader
+    if (categories.isEmpty) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    _category ??= widget.initialCategory ?? categories.first;
     return Scaffold(
       appBar: AppBar(title: const Text('新增流水')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // 金额输入
+            // Input money
             TextField(
               controller: _amtCtrl,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(labelText: '金额'),
             ),
 
-            // 币种选择
+            // select currency
             DropdownButton<String>(
               value: _currency,
               items:
@@ -57,7 +54,6 @@ class _AddTxScreenState extends State<AddTxScreen> {
               onChanged: (v) => setState(() => _currency = v!),
             ),
    
-            // —— 修复后的分类下拉 ——
             DropdownButton<Category>(
               value: _category,
               items:
@@ -95,7 +91,7 @@ class _AddTxScreenState extends State<AddTxScreen> {
                 final tx = Transaction(
                   amount: amount,
                   currency: _currency,
-                  category: _category,
+                  category: _category!,
                   occurredAt: _date,
                 );
                 context.read<TxListModel>().add(tx);

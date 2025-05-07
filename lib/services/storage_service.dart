@@ -9,6 +9,7 @@ class StorageService {
     Hive.registerAdapter(CategoryAdapter());
 
     await Hive.openBox<Transaction>('transactions');
+    await Hive.openBox<Category>('categories');
   }
 
   // Transaction CRUD
@@ -19,4 +20,13 @@ class StorageService {
   List<Transaction> getAllTx() => txBox.values.toList();
 
   Future<void> deleteTx(int idx) => txBox.deleteAt(idx);
+
+  // Category CRUD 
+  Box<Category> get categoryBox => Hive.box<Category>('categories');
+
+  Future<void> addCategory(Category c) => categoryBox.add(c);
+
+  List<Category> getAllCategories() => categoryBox.values.toList();
+
+  Future<void> deleteCategory(int idx) => categoryBox.deleteAt(idx);
 }
