@@ -43,6 +43,9 @@ dependencies:
 
   fl_chart: ^0.63.0
 
+  flutter_localizations:
+    sdk: flutter
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,7 +69,12 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
+  l10n-arbconfig:
+    template-arb-file: app_en.arb
+    output-localization-file: app_localizations.dart
+    output-dir: lib/l10n/generated
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
