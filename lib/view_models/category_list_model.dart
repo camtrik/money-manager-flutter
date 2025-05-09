@@ -10,10 +10,10 @@ class CategoryListModel extends ChangeNotifier {
   List<Category> get all => _all;
 
   CategoryListModel() {
-    init();
+    _init();
   }
 
-  Future<void> init() async {
+  Future<void> _init() async {
     _all = _storage.getAllCategories();
 
     final defaults = <Category>[
