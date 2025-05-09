@@ -7,12 +7,30 @@ import 'package:money_manager/services/storage_service.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/screens/category_screen.dart';
 
+class LocaleProvider extends ChangeNotifier {
+  Locale _locale = Locale('en');
+
+  Locale get locale => _locale;
+
+  void setLocale(Locale locale) {
+    _locale = locale;
+    notifyListeners();
+  }
+}
+
 void main() async {
   // await Hive.deleteBoxFromDisk('categories');
 
   WidgetsFlutterBinding.ensureInitialized();
   await StorageService.init(); // 初始化 Hive 本地存储
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocaleProvider())
+      ],
+      child: const MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/models/category.dart';
+import 'package:money_manager/models/settings.dart';
 import 'package:money_manager/models/transaction.dart';
 
 class StorageService {
@@ -7,9 +8,17 @@ class StorageService {
     await Hive.initFlutter();
     Hive.registerAdapter(TransactionAdapter());
     Hive.registerAdapter(CategoryAdapter());
+    Hive.registerAdapter(SettingsAdapter());
 
     await Hive.openBox<Transaction>('transactions');
     await Hive.openBox<Category>('categories');
+    await Hive.openBox<Settings>('settings');
+
+    // initialize settings
+    final settingsBox = Hive.box<Settings>('settings');
+    if (settingsBox.isEmpty) {
+      settingsBox.add(Settings());
+    }
   }
 
   // Transaction CRUD
@@ -29,4 +38,12 @@ class StorageService {
   List<Category> getAllCategories() => categoryBox.values.toList();
 
   Future<void> deleteCategory(int idx) => categoryBox.deleteAt(idx);
+
+  // Settings 
+  Box<Settings> get settingsBox => Hive.box<Settings>('settings');
+
+  Settings getSettings() => settingsBox.getAt(0) ?? Settings();
+
+  Future<void> updateSettings(Settings s) => settingsBox.putAt(0, s);
+
 }
