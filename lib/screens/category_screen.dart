@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/screens/add_tx_screen.dart';
+import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/screens/settings_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
@@ -56,9 +57,11 @@ class CategoryScreen extends StatelessWidget {
               final total = sums[c.id] ?? 0;
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => const AddTxScreen())
+                  showModalBottomSheet(
+                    context: context, 
+                    isScrollControlled: true, 
+                    backgroundColor: Colors.transparent, 
+                    builder: (context) => AddTransactionSheet(category: c),
                   );
                 },
                 child: Column(

@@ -1,0 +1,363 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:money_manager/models/category.dart';
+import 'package:money_manager/models/transaction.dart';
+import 'package:money_manager/view_models/tx_list_model.dart';
+import 'package:money_manager/l10n/gen/app_localizations.dart';
+
+class AddTransactionSheet extends StatefulWidget {
+  final Category category;
+
+  const AddTransactionSheet({Key? key, required this.category}) : super(key: key);
+
+  @override
+  State<AddTransactionSheet> createState() => _AddTransactionSheetState();
+}
+
+class _AddTransactionSheetState extends State<AddTransactionSheet> {
+  String _amount = '0';
+  String _currency = 'CNY';
+  DateTime _date = DateTime.now();
+  final TextEditingController _remarkController = TextEditingController();
+  
+  void _onNumberPressed(String value) {
+    setState(() {
+      if (_amount == '0') {
+        _amount = value;
+      } else {
+        _amount += value;
+      }
+    });
+  }
+
+  void _onDecimalPressed() {
+    setState(() {
+      if (!_amount.contains('.')) {
+        _amount += '.';
+      }
+    });
+  }
+
+  void _onClearPressed() {
+    setState(() {
+      _amount = '0';
+    });
+  }
+
+  void _onDeletePressed() {
+    setState(() {
+      if (_amount.length > 1) {
+        _amount = _amount.substring(0, _amount.length - 1);
+      } else {
+        _amount = '0';
+      }
+    });
+  }
+
+  void _saveTransaction() {
+    final amount = double.tryParse(_amount) ?? 0.0;
+    if (amount > 0) {
+      final transaction = Transaction(
+        amount: amount,
+        currency: _currency,
+        category: widget.category,
+        occurredAt: _date,
+      );
+      context.read<TxListModel>().add(transaction);
+      Navigator.pop(context);
+    }
+  }
+
+  void _showDatePicker() async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _date = pickedDate;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _remarkController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Handle bar
+          Container(
+            width: 40,
+            height: 4,
+            margin: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+
+          // Header with category type and from account
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Color(widget.category.colorValue).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Color(widget.category.colorValue),
+                        child: Text(
+                          widget.category.icon,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        widget.category.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(l10n.category),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Amount display
+          Text(
+            '支出',
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '¥ $_amount',
+            style: const TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Remark field
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              controller: _remarkController,
+              decoration: InputDecoration(
+                hintText: '备注...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Calculator buttons with constrained width
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      // First row
+                      _buildButtonRow([
+                        _buildOperatorButton('÷'),
+                        _buildCalculatorButton('7', onPressed: () => _onNumberPressed('7')),
+                        _buildCalculatorButton('8', onPressed: () => _onNumberPressed('8')),
+                        _buildCalculatorButton('9', onPressed: () => _onNumberPressed('9')),
+                        _buildIconButton(Icons.backspace_outlined, onPressed: _onDeletePressed),
+                      ]),
+                      const SizedBox(height: 8),
+                      
+                      // Second row
+                      _buildButtonRow([
+                        _buildOperatorButton('×'),
+                        _buildCalculatorButton('4', onPressed: () => _onNumberPressed('4')),
+                        _buildCalculatorButton('5', onPressed: () => _onNumberPressed('5')),
+                        _buildCalculatorButton('6', onPressed: () => _onNumberPressed('6')),
+                        _buildIconButton(Icons.calendar_today, onPressed: _showDatePicker),
+                      ]),
+                      const SizedBox(height: 8),
+                      
+                      // Third row
+                      _buildButtonRow([
+                        _buildOperatorButton('-'),
+                        _buildCalculatorButton('1', onPressed: () => _onNumberPressed('1')),
+                        _buildCalculatorButton('2', onPressed: () => _onNumberPressed('2')),
+                        _buildCalculatorButton('3', onPressed: () => _onNumberPressed('3')),
+                        _buildIconButton(
+                          Icons.check, 
+                          onPressed: _saveTransaction,
+                          backgroundColor: Color(widget.category.colorValue),
+                          iconColor: Colors.white,
+                        ),
+                      ]),
+                      const SizedBox(height: 8),
+                      
+                      // Fourth row
+                      _buildButtonRow([
+                        _buildOperatorButton('+'),
+                        _buildCalculatorButton('0', onPressed: () => _onNumberPressed('0')),
+                        _buildCalculatorButton('.', onPressed: _onDecimalPressed),
+                        _buildCalculatorButton('¥', onPressed: () {}),
+                        _buildEmptyButton(), // 修复错位问题：使用空按钮代替 SizedBox
+                      ]),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Date display at bottom
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              '今天，${_date.year}年${_date.month}月${_date.day}日',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtonRow(List<Widget> buttons) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: buttons,
+    );
+  }
+
+  Widget _buildCalculatorButton(String label, {required VoidCallback onPressed}) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: ElevatedButton(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey.shade100,
+              foregroundColor: Colors.black87,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+              padding: EdgeInsets.zero,
+            ),
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 24),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOperatorButton(String operator) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey.shade200,
+              foregroundColor: Colors.black87,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+              padding: EdgeInsets.zero,
+            ),
+            child: Text(
+              operator,
+              style: const TextStyle(fontSize: 24),
+            ),
+          ),
+        ),
+      ),
+    );  
+  }
+
+  Widget _buildIconButton(
+    IconData icon, {
+    required VoidCallback onPressed,
+    Color? backgroundColor,
+    Color? iconColor,
+  }) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: ElevatedButton(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: backgroundColor ?? Colors.grey.shade100,
+              foregroundColor: iconColor ?? Colors.black87,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+              padding: EdgeInsets.zero,
+            ),
+            child: Icon(icon, size: 24),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 添加新方法：创建空占位符按钮
+  Widget _buildEmptyButton() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(), // 空容器作为占位符
+        ),
+      ),
+    );
+  }
+}

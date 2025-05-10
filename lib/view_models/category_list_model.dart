@@ -27,7 +27,7 @@ class CategoryListModel extends ChangeNotifier {
       Category(id: 'housing',         name: 'Housing',       icon: '🏠', colorValue: Colors.brown.toARGB32()),
       Category(id: 'communication',   name: 'Communication', icon: '📱', colorValue: Colors.teal.toARGB32()),
       Category(id: 'daily_necessities', name: 'Daily',        icon: '🧹', colorValue: Colors.green.toARGB32()),
-      Category(id: 'other',           name: 'Other',         icon: '🔖', colorValue: Colors.grey.toARGB32()),
+      Category(id: 'other',           name: 'Other',         icon: '❓', colorValue: Colors.grey.toARGB32()),
     ];
   
     final existingIds = _all.map((c) => c.id).toSet();

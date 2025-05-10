@@ -7,7 +7,7 @@ class StorageService {
   static Future<void> init() async {
     await Hive.initFlutter();
 
-    await Hive.deleteBoxFromDisk('categories');
+    // await Hive.deleteBoxFromDisk('categories');
 
     Hive.registerAdapter(TransactionAdapter());
     Hive.registerAdapter(CategoryAdapter());
