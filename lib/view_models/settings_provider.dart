@@ -4,7 +4,7 @@ import 'package:money_manager/services/storage_service.dart';
 
 class SettingsProvider extends ChangeNotifier {
   final _storage = StorageService();
-  late Settings _settings;
+  Settings _settings = Settings();
 
   SettingsProvider() {
     final _settings = _storage.getSettings();
