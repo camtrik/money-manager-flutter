@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_manager/l10n/gen/app_localizations.dart';
+import 'package:money_manager/screens/settings_screen.dart';
 import 'package:money_manager/screens/tx_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
+import 'package:money_manager/view_models/settings_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/services/storage_service.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
@@ -43,7 +47,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
 
-  // 底部导航对应的页面列表
+  // bottom navigation bar pages 
   static const List<Widget> _pages = <Widget>[
     CategoryScreen(),
     TransactionScreen(),
@@ -55,31 +59,69 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryListModel()),
         ChangeNotifierProvider(create: (_) => TxListModel()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
-      child: MaterialApp(
-        title: '记账应用',
-        home: Scaffold(
-          body: _pages[_currentIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.pie_chart),
-                label: '类别',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: '交易',
-              ),
+      child: Consumer<SettingsProvider>(
+        builder: (context, SettingsProvider, _) {
+          return MaterialApp(
+            locale: SettingsProvider.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate, 
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate, 
+              GlobalCupertinoLocalizations.delegate,
             ],
-            onTap: (int index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-          ),
-        ),
-      ),
+            supportedLocales: const [
+              Locale('en'),
+              Locale('zh'),
+              Locale('jp'),
+            ],
+            title: 'Money Manager',
+            home: Builder(
+              builder: (context) {
+                final l10n = AppLocalizations.of(context)!; 
+                return Scaffold(
+                  appBar: AppBar(
+                    // title: Text(l10n.appTitle), 
+                    actions: [
+                      IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const SettingsScreen())
+                          );
+                        }
+                      )
+                    ]
+                  ),
+
+                  body: _pages[_currentIndex],
+                  bottomNavigationBar: BottomNavigationBar(
+                    currentIndex: _currentIndex,
+                    items: <BottomNavigationBarItem> [
+                      BottomNavigationBarItem(
+                        icon: const Icon(Icons.pie_chart),
+                        label: l10n.categories, 
+                      ), 
+                      BottomNavigationBarItem(
+                        icon: const Icon(Icons.list),
+                        label: l10n.transactions
+                      )
+                    ],
+                    onTap: (int index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                  ),
+                );
+              }
+            
+            )
+          );
+        }
+      )
     );
   }
 }
