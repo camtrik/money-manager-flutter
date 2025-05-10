@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: const [
               Locale('en'),
               Locale('zh'),
-              Locale('jp'),
+              Locale('ja'),
             ],
             title: 'Money Manager',
             home: Builder(

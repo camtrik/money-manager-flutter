@@ -72,4 +72,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get bankCard => '銀行カード';
+
+  @override
+  String get notes => 'メモ';
+
+  @override
+  String get today => '今日';
 }

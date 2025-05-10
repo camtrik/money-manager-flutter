@@ -72,4 +72,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get bankCard => '银行卡';
+
+  @override
+  String get notes => '备注';
+
+  @override
+  String get today => '今天';
 }

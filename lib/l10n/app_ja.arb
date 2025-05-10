@@ -20,5 +20,7 @@
   "startingBalance": "開始残高",
   "endingBalance": "期末残高",
   "selectMonth": "月を選択",
-  "bankCard": "銀行カード"
+  "bankCard": "銀行カード",
+  "notes": "メモ",
+  "today": "今日"
 }

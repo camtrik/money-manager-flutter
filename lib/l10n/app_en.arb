@@ -20,5 +20,7 @@
   "startingBalance": "Starting Balance",
   "endingBalance": "Ending Balance",
   "selectMonth": "Select Month",
-  "bankCard": "Bank Card"
+  "bankCard": "Bank Card",
+  "notes": "Notes",
+  "today": "Today"
 }

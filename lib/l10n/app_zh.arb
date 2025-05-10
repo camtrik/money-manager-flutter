@@ -20,5 +20,7 @@
   "startingBalance": "起始余额",
   "endingBalance": "期末余额",
   "selectMonth": "选择月份",
-  "bankCard": "银行卡"
+  "bankCard": "银行卡",
+  "notes": "备注",
+  "today": "今天"
 }

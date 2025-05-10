@@ -40,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
     switch (languageCode) {
       case 'en': return l10n.english;
       case 'zh': return l10n.chinese;
-      case 'jp': return l10n.japanese;
+      case 'ja': return l10n.japanese;
       default: return l10n.english;
     }
   }
@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
           children: [
             _buildLanguageOption(context, settingsProvider, "English", "en"), 
             _buildLanguageOption(context, settingsProvider, "中文", "zh"), 
-            _buildLanguageOption(context, settingsProvider, "日本語", "jp")
+            _buildLanguageOption(context, settingsProvider, "日本語", "ja")
           ],
         )
       );
