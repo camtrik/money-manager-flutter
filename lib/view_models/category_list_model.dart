@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/services/storage_service.dart';
@@ -12,6 +10,8 @@ class CategoryListModel extends ChangeNotifier {
   List<Category> get all => _all;
 
   CategoryListModel() {
+    print('🚀 CategoryListModel constructor called');
+
     _init();
   }
 
@@ -35,8 +35,8 @@ class CategoryListModel extends ChangeNotifier {
     for (var c in defaults) {
       if (!existingIds.contains(c.id)) {
         await _storage.addCategory(c);
-        log('added category name: ${c.name}');
-        log('added category color: ${c.colorValue}');
+      } else {
+        print('🚀 Category already exists: ${c.name}');
       }
     }
 

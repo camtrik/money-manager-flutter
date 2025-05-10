@@ -6,6 +6,9 @@ import 'package:money_manager/models/transaction.dart';
 class StorageService {
   static Future<void> init() async {
     await Hive.initFlutter();
+
+    await Hive.deleteBoxFromDisk('categories');
+
     Hive.registerAdapter(TransactionAdapter());
     Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(SettingsAdapter());
