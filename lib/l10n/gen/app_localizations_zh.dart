@@ -60,4 +60,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get japanese => '日文';
+
+  @override
+  String get startingBalance => '起始余额';
+
+  @override
+  String get endingBalance => '期末余额';
+
+  @override
+  String get selectMonth => '选择月份';
+
+  @override
+  String get bankCard => '银行卡';
 }

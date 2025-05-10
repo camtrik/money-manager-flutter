@@ -23,9 +23,11 @@ class LocaleProvider extends ChangeNotifier {
 }
 
 void main() async {
-  // await Hive.deleteBoxFromDisk('categories');
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  // await Hive.deleteBoxFromDisk('categories');
+
   await StorageService.init(); // 初始化 Hive 本地存储
   runApp(
     MultiProvider(

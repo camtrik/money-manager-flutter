@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +15,16 @@ class Category {
   @HiveField(2)
   String icon;
 
-  Category({String? id, required this.name, required this.icon})
-    : id = id ?? const Uuid().v4();
+  @HiveField(3)
+  int colorValue;
+
+  Category({
+    String? id, 
+    required this.name, 
+    required this.icon, 
+    int? colorValue
+  })
+    : id = id ?? const Uuid().v4(),
+      colorValue = colorValue ?? Colors.blue.toARGB32();
+
 }

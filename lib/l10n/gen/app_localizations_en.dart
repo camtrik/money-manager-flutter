@@ -60,4 +60,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get japanese => 'Japanese';
+
+  @override
+  String get startingBalance => 'Starting Balance';
+
+  @override
+  String get endingBalance => 'Ending Balance';
+
+  @override
+  String get selectMonth => 'Select Month';
+
+  @override
+  String get bankCard => 'Bank Card';
 }

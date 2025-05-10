@@ -16,5 +16,9 @@
   "language": "Language",
   "english": "English",
   "chinese": "Chinese",
-  "japanese": "Japanese"
+  "japanese": "Japanese",
+  "startingBalance": "Starting Balance",
+  "endingBalance": "Ending Balance",
+  "selectMonth": "Select Month",
+  "bankCard": "Bank Card"
 }

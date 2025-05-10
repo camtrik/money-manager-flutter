@@ -7,7 +7,7 @@ import 'package:money_manager/view_models/tx_list_model.dart';
 
 class AddTxScreen extends StatefulWidget {
   final Category? initialCategory;
-  const AddTxScreen({Key? key, this.initialCategory}) : super(key: key);
+  const AddTxScreen({super.key, this.initialCategory});
 
   @override
   State<AddTxScreen> createState() => _AddTxScreenState();

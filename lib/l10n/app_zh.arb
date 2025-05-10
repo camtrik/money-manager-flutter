@@ -16,5 +16,9 @@
   "language": "语言",
   "english": "英文",
   "chinese": "中文",
-  "japanese": "日文"
+  "japanese": "日文",
+  "startingBalance": "起始余额",
+  "endingBalance": "期末余额",
+  "selectMonth": "选择月份",
+  "bankCard": "银行卡"
 }

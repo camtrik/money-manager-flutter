@@ -21,6 +21,7 @@ class TransactionScreen extends StatelessWidget {
     final List<Transaction> txs = txListModel.all;
 
     return Scaffold(
+      appBar: AppBar(title: const Text('记账应用')),
       body:
           txs.isEmpty
               ? const Center(child: Text('暂无交易记录'))

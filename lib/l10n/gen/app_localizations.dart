@@ -198,6 +198,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Japanese'**
   String get japanese;
+
+  /// No description provided for @startingBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting Balance'**
+  String get startingBalance;
+
+  /// No description provided for @endingBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Ending Balance'**
+  String get endingBalance;
+
+  /// No description provided for @selectMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Month'**
+  String get selectMonth;
+
+  /// No description provided for @bankCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Card'**
+  String get bankCard;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
