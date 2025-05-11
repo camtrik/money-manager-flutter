@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
-import 'package:money_manager/screens/add_tx_screen.dart';
 import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/screens/settings_screen.dart';
 import 'package:money_manager/utils/category_utils.dart';
