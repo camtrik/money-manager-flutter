@@ -58,4 +58,12 @@ class CategoryListModel extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  Category? getById(String id) {
+    try {
+      return _all.firstWhere((c) => c.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
 }

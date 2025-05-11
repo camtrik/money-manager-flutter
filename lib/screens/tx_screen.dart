@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
+import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
+import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
-import 'package:money_manager/screens/add_tx_screen.dart';
 
 class TransactionScreen extends StatelessWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class TransactionScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final txListModel = context.watch<TxListModel>();
     final List<Transaction> txs = txListModel.all;
+    final defaultCategory = context.read<CategoryListModel>().getById("other")!;
 
     return Scaffold(
       body:
@@ -52,9 +54,14 @@ class TransactionScreen extends StatelessWidget {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const AddTxScreen()));
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+
+            builder: (context) => AddTransactionSheet(
+              category: defaultCategory,
+            )
+          );
         },
         child: const Icon(Icons.add),
       ),
