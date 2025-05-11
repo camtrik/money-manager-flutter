@@ -76,7 +76,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: _date,
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2010),
       lastDate: DateTime.now(),
     );
     if (pickedDate != null) {
@@ -120,39 +120,51 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
 
           // Header with category type and from account
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16), 
+            child: Center(
+              child: GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   decoration: BoxDecoration(
                     color: Color(widget.category.colorValue).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: Color(widget.category.colorValue).withValues(alpha: 0.3),
+                      width: 1,
+                    ),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 16,
-                        backgroundColor: Color(widget.category.colorValue),
+                        radius: 20,
+                        backgroundColor: Color(widget.category.colorValue).withValues(alpha: 0.2),
                         child: Text(
                           widget.category.icon,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        CategoryUtils.getLocalizedName(context, widget.category.id, widget.category.name),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        CategoryUtils.getLocalizedName(context, widget.category.id, widget.category.name),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      Icon(
+                        Icons.arrow_drop_down,
+                        color: Color(widget.category.colorValue),
                       ),
                     ],
                   ),
                 ),
-                Text(l10n.category),
-              ],
+                // onTap: _showCategoryPicker,
+              ),
             ),
-          ),
-
+          ), 
+        
           const SizedBox(height: 16),
 
           // Amount display
