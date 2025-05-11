@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Money Manager';
 
   @override
+  String get settings => 'Settings';
+
+  @override
   String get categories => 'Categories';
 
   @override
@@ -19,6 +22,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newTransaction => 'New Transaction';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get deleted => 'Deleted';
 
   @override
   String get amount => 'Amount';
@@ -33,21 +42,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get date => 'Date';
 
   @override
-  String get save => 'Save';
+  String get notes => 'Notes';
+
+  @override
+  String get categoryDining => 'Dining';
+
+  @override
+  String get categoryTransport => 'Transport';
+
+  @override
+  String get categoryShopping => 'Shopping';
+
+  @override
+  String get categoryEntertainment => 'Entertainment';
+
+  @override
+  String get categoryMedical => 'Medical';
+
+  @override
+  String get categoryHousing => 'Housing';
+
+  @override
+  String get categoryCommunication => 'Communication';
+
+  @override
+  String get categoryDaily => 'Daily';
+
+  @override
+  String get categoryOther => 'Other';
 
   @override
   String get noTransactions => 'No transactions yet';
 
   @override
-  String get deleted => 'Deleted';
+  String get expense => 'Expense';
 
   @override
-  String totalExpense(Object amount) {
-    return 'Total expense: ¥$amount';
-  }
+  String get totalExpense => 'Total expense';
 
   @override
-  String get settings => 'Settings';
+  String get today => 'Today';
+
+  @override
+  String get selectMonth => 'Select Month';
 
   @override
   String get language => 'Language';
@@ -68,14 +105,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get endingBalance => 'Ending Balance';
 
   @override
-  String get selectMonth => 'Select Month';
-
-  @override
   String get bankCard => 'Bank Card';
-
-  @override
-  String get notes => 'Notes';
-
-  @override
-  String get today => 'Today';
 }

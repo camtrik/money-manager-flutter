@@ -1,10 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/screens/add_tx_screen.dart';
 import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/screens/settings_screen.dart';
+import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,8 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context)!;
     final List<Transaction> txs = context.watch<TxListModel>().all;
 
     final Map<String, double> sums = {};
@@ -76,7 +80,7 @@ class CategoryScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(c.name),
+                    Text(CategoryUtils.getLocalizedName(context, c.id, c.name)),
                     Text(
                       '¥${total.toStringAsFixed(0)}',
                       style: TextStyle(
@@ -93,14 +97,15 @@ class CategoryScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           Expanded(
-            child: sections.isEmpty
-                ? const Center(
+            child: 
+            sections.isEmpty
+                ? Center(
                     child: Text(
-                      '暂无支出数据',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      l10n.noTransactions,
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   )
-                : Stack (
+                : Stack(
                   alignment: Alignment.center,
                   children: [
                     PieChart(
@@ -114,7 +119,7 @@ class CategoryScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '本月支出',
+                          l10n.totalExpense,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade600,

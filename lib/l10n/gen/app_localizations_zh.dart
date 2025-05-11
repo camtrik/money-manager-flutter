@@ -12,6 +12,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appTitle => '记账应用';
 
   @override
+  String get settings => '设置';
+
+  @override
   String get categories => '类别';
 
   @override
@@ -19,6 +22,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get newTransaction => '新增流水';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get deleted => '已删除交易';
 
   @override
   String get amount => '金额';
@@ -33,21 +42,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get date => '日期';
 
   @override
-  String get save => '保存';
+  String get notes => '备注';
+
+  @override
+  String get categoryDining => '餐饮';
+
+  @override
+  String get categoryTransport => '交通';
+
+  @override
+  String get categoryShopping => '购物';
+
+  @override
+  String get categoryEntertainment => '娱乐';
+
+  @override
+  String get categoryMedical => '医疗';
+
+  @override
+  String get categoryHousing => '住房';
+
+  @override
+  String get categoryCommunication => '通讯';
+
+  @override
+  String get categoryDaily => '日用';
+
+  @override
+  String get categoryOther => '其他';
 
   @override
   String get noTransactions => '暂无交易记录';
 
   @override
-  String get deleted => '已删除交易';
+  String get expense => '支出';
 
   @override
-  String totalExpense(Object amount) {
-    return '本月支出：¥$amount';
-  }
+  String get totalExpense => '总支出';
 
   @override
-  String get settings => '设置';
+  String get today => '今天';
+
+  @override
+  String get selectMonth => '选择月份';
 
   @override
   String get language => '语言';
@@ -68,14 +105,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get endingBalance => '期末余额';
 
   @override
-  String get selectMonth => '选择月份';
-
-  @override
   String get bankCard => '银行卡';
-
-  @override
-  String get notes => '备注';
-
-  @override
-  String get today => '今天';
 }

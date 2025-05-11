@@ -12,6 +12,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appTitle => 'マネーマネージャー';
 
   @override
+  String get settings => '設定';
+
+  @override
   String get categories => 'カテゴリー';
 
   @override
@@ -19,6 +22,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get newTransaction => '新規取引';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get deleted => '取引が削除されました';
 
   @override
   String get amount => '金額';
@@ -33,21 +42,49 @@ class AppLocalizationsJa extends AppLocalizations {
   String get date => '日付';
 
   @override
-  String get save => '保存';
+  String get notes => 'メモ';
+
+  @override
+  String get categoryDining => '食事';
+
+  @override
+  String get categoryTransport => '交通';
+
+  @override
+  String get categoryShopping => '買い物';
+
+  @override
+  String get categoryEntertainment => '娯楽';
+
+  @override
+  String get categoryMedical => '医療';
+
+  @override
+  String get categoryHousing => '住居';
+
+  @override
+  String get categoryCommunication => '通信';
+
+  @override
+  String get categoryDaily => '日用品';
+
+  @override
+  String get categoryOther => 'その他';
 
   @override
   String get noTransactions => '取引記録がありません';
 
   @override
-  String get deleted => '取引が削除されました';
+  String get expense => '支出';
 
   @override
-  String totalExpense(Object amount) {
-    return '今月の支出：¥$amount';
-  }
+  String get totalExpense => '総支出';
 
   @override
-  String get settings => '設定';
+  String get today => '今日';
+
+  @override
+  String get selectMonth => '月を選択';
 
   @override
   String get language => '言語';
@@ -68,14 +105,5 @@ class AppLocalizationsJa extends AppLocalizations {
   String get endingBalance => '期末残高';
 
   @override
-  String get selectMonth => '月を選択';
-
-  @override
   String get bankCard => '銀行カード';
-
-  @override
-  String get notes => 'メモ';
-
-  @override
-  String get today => '今日';
 }

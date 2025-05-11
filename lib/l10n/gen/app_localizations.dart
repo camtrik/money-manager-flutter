@@ -103,6 +103,12 @@ abstract class AppLocalizations {
   /// **'Money Manager'**
   String get appTitle;
 
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
   /// No description provided for @categories.
   ///
   /// In en, this message translates to:
@@ -120,6 +126,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New Transaction'**
   String get newTransaction;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get deleted;
 
   /// No description provided for @amount.
   ///
@@ -145,11 +163,65 @@ abstract class AppLocalizations {
   /// **'Date'**
   String get date;
 
-  /// No description provided for @save.
+  /// No description provided for @notes.
   ///
   /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @categoryDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining'**
+  String get categoryDining;
+
+  /// No description provided for @categoryTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get categoryTransport;
+
+  /// No description provided for @categoryShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get categoryShopping;
+
+  /// No description provided for @categoryEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get categoryEntertainment;
+
+  /// No description provided for @categoryMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get categoryMedical;
+
+  /// No description provided for @categoryHousing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing'**
+  String get categoryHousing;
+
+  /// No description provided for @categoryCommunication.
+  ///
+  /// In en, this message translates to:
+  /// **'Communication'**
+  String get categoryCommunication;
+
+  /// No description provided for @categoryDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get categoryDaily;
+
+  /// No description provided for @categoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get categoryOther;
 
   /// No description provided for @noTransactions.
   ///
@@ -157,23 +229,29 @@ abstract class AppLocalizations {
   /// **'No transactions yet'**
   String get noTransactions;
 
-  /// No description provided for @deleted.
+  /// No description provided for @expense.
   ///
   /// In en, this message translates to:
-  /// **'Deleted'**
-  String get deleted;
+  /// **'Expense'**
+  String get expense;
 
   /// No description provided for @totalExpense.
   ///
   /// In en, this message translates to:
-  /// **'Total expense: ¥{amount}'**
-  String totalExpense(Object amount);
+  /// **'Total expense'**
+  String get totalExpense;
 
-  /// No description provided for @settings.
+  /// No description provided for @today.
   ///
   /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @selectMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Month'**
+  String get selectMonth;
 
   /// No description provided for @language.
   ///
@@ -211,29 +289,11 @@ abstract class AppLocalizations {
   /// **'Ending Balance'**
   String get endingBalance;
 
-  /// No description provided for @selectMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'Select Month'**
-  String get selectMonth;
-
   /// No description provided for @bankCard.
   ///
   /// In en, this message translates to:
   /// **'Bank Card'**
   String get bankCard;
-
-  /// No description provided for @notes.
-  ///
-  /// In en, this message translates to:
-  /// **'Notes'**
-  String get notes;
-
-  /// No description provided for @today.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get today;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
