@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
+import 'package:money_manager/screens/add_category_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +10,19 @@ class SelectCategorySheet extends StatelessWidget {
   final Function(Category) onCategorySelected;
 
   const SelectCategorySheet({super.key, required this.onCategorySelected});
+
+   void _navigateToAddCategory(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddCategoryScreen()),
+    );
+    
+    // If a new category was created and returned
+    if (result != null && result is Category) {
+      onCategorySelected(result);
+      Navigator.pop(context);
+    }
+  }
 
   Widget _buildCategoryItem({
     required String icon,
@@ -116,8 +130,7 @@ class SelectCategorySheet extends StatelessWidget {
                     label: '', 
                     color: Colors.grey,
                     onTap: () {
-                      // TODO: Add new category
-                      Navigator.pop(context);
+                      _navigateToAddCategory(context);
                     }
                   );
                 }
