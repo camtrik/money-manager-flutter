@@ -11,19 +11,6 @@ class SelectCategorySheet extends StatelessWidget {
 
   const SelectCategorySheet({super.key, required this.onCategorySelected});
 
-   void _navigateToAddCategory(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const AddCategoryScreen()),
-    );
-    
-    // If a new category was created and returned
-    if (result != null && result is Category) {
-      onCategorySelected(result);
-      Navigator.pop(context);
-    }
-  }
-
   Widget _buildCategoryItem({
     required String icon,
     required String label,
@@ -129,9 +116,17 @@ class SelectCategorySheet extends StatelessWidget {
                     icon: '+',
                     label: '', 
                     color: Colors.grey,
-                    onTap: () {
-                      _navigateToAddCategory(context);
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AddCategoryScreen()),
+                      );
+                      if (result != null && result is Category) {
+                        onCategorySelected(result);
+                        Navigator.pop(context);
+                      }
                     }
+
                   );
                 }
                 
