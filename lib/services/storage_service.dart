@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/models/category.dart';
+import 'package:money_manager/models/icon_data_adapter.dart';
 import 'package:money_manager/models/settings.dart';
 import 'package:money_manager/models/transaction.dart';
 
@@ -8,14 +9,18 @@ class StorageService {
     await Hive.initFlutter();
 
     // await Hive.deleteBoxFromDisk('categories');
+    // await Hive.deleteBoxFromDisk('transactions');
+    // await Hive.deleteBoxFromDisk('settings');
 
     Hive.registerAdapter(TransactionAdapter());
     Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(SettingsAdapter());
+    Hive.registerAdapter(IconDataAdapter());
 
     await Hive.openBox<Transaction>('transactions');
     await Hive.openBox<Category>('categories');
     await Hive.openBox<Settings>('settings');
+
 
     // initialize settings
     final settingsBox = Hive.box<Settings>('settings');

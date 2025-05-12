@@ -33,7 +33,7 @@ class TransactionScreen extends StatelessWidget {
               itemBuilder: (ctx, index) {
                 final tx = txs[index];
                 return ListTile(
-                  leading: Text(tx.category.icon),
+                  leading: Icon(tx.category.icon),
                   title: Text(
                     '${tx.amount.toStringAsFixed(2)} ${tx.currency}',
                   ),

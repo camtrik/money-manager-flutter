@@ -13,21 +13,21 @@ class AddCategoryScreen extends StatefulWidget {
 
 class _AddCategoryScreenState extends State<AddCategoryScreen> {
   final TextEditingController _nameController = TextEditingController();
-  String _selectedIcon = '❓'; // Default icon
+  IconData _selectedIcon = Icons.question_mark; // Default icon
   Color _selectedColor = Colors.purple; // Default color
   int _currentIndex = 0; // 0 for icon selection, 1 for color selection
   
   // List of common emoji icons to choose from
-  final List<String> _icons = [
-    '🍔', '🍕', '🍣', '🍦', '🍵', '🍺', 
-    '🚗', '🚌', '🚖', '🚕', '🚅', '✈️',
-    '🛍️', '👕', '👟', '💍', '🎁', '📱',
-    '🎬', '🎮', '🎯', '🎨', '🎪', '🎭',
-    '💊', '🏥', '🩺', '💉', '🦷', '👓',
-    '🏠', '🏢', '💡', '🛁', '🧻', '🧼',
-    '📱', '💻', '📞', '📺', '🖨️', '📷',
-    '🧹', '🧴', '🧾', '🧷', '🧸', '🪒',
-    '❓', '🎓', '🏆', '💼', '🧰', '🔧',
+  final List<IconData> _icons = [
+    Icons.restaurant, Icons.directions_bus, Icons.restaurant, Icons.restaurant, Icons.restaurant, Icons.restaurant, 
+    Icons.directions_car, Icons.directions_bus, Icons.directions_car, Icons.directions_car, Icons.train, Icons.directions_bus,
+    Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart,
+    Icons.movie, Icons.gamepad, Icons.directions_bus, Icons.palette, Icons.theater_comedy, Icons.directions_bus,
+    Icons.medical_services, Icons.local_hospital, Icons.local_hospital, Icons.local_hospital, Icons.directions_bus, Icons.directions_bus,
+    Icons.house, Icons.directions_bus, Icons.lightbulb, Icons.shower, Icons.recycling, Icons.soap,
+    Icons.smartphone, Icons.computer, Icons.phone, Icons.tv, Icons.directions_bus, Icons.camera,
+    Icons.cleaning_services, Icons.soap, Icons.receipt, Icons.receipt, Icons.receipt, Icons.receipt,
+    Icons.question_mark, Icons.school, Icons.directions_bus, Icons.directions_bus, Icons.directions_bus, Icons.directions_bus,
   ];
   
   // List of material colors to choose from
@@ -113,9 +113,9 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   : Border.all(color: Colors.grey.withOpacity(0.3)),
             ),
             child: Center(
-              child: Text(
+              child: Icon(
                 icon,
-                style: const TextStyle(fontSize: 32),
+                size: 32,
               ),
             ),
           ),
@@ -243,9 +243,9 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     ),
                   ),
                   child: Center(
-                    child: Text(
+                    child: Icon(
                       _selectedIcon,
-                      style: const TextStyle(fontSize: 36),
+                      size: 36,
                     ),
                   ),
                 ),

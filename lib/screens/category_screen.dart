@@ -73,9 +73,9 @@ class CategoryScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 24,
                       backgroundColor: Color(c.colorValue).withValues(alpha: 0.5),
-                      child: Text(
+                      child: Icon(
                         c.icon,
-                        style: const TextStyle(fontSize: 24),
+                        size: 24,
                       ),
                     ),
                     const SizedBox(height: 4),

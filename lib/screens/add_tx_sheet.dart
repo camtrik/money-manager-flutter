@@ -162,9 +162,9 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
                       CircleAvatar(
                         radius: 20,
                         backgroundColor: Color(_selectedCategory.colorValue).withValues(alpha: 0.2),
-                        child: Text(
+                        child: Icon(
                           _selectedCategory.icon,
-                          style: const TextStyle(fontSize: 20),
+                          size: 20,
                         ),
                       ),
                       const SizedBox(width: 12),

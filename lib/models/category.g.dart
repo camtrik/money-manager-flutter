@@ -19,7 +19,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
     return Category(
       id: fields[0] as String?,
       name: fields[1] as String,
-      icon: fields[2] as String,
+      icon: fields[2] as IconData,
       colorValue: fields[3] as int?,
     );
   }

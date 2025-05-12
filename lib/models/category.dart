@@ -13,7 +13,7 @@ class Category {
   String name;
 
   @HiveField(2)
-  String icon;
+  IconData icon;
 
   @HiveField(3)
   int colorValue;

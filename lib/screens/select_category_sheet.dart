@@ -12,7 +12,7 @@ class SelectCategorySheet extends StatelessWidget {
   const SelectCategorySheet({super.key, required this.onCategorySelected});
 
   Widget _buildCategoryItem({
-    required String icon,
+    required IconData icon,
     required String label,
     required Color color,
     String? amount,
@@ -31,9 +31,9 @@ class SelectCategorySheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(28),
             ),
             child: Center(
-              child: Text(
+              child: Icon(
                 icon,
-                style: const TextStyle(fontSize: 24),
+                size: 24,
               ),
             ),
           ),
@@ -113,7 +113,7 @@ class SelectCategorySheet extends StatelessWidget {
                 // Add item
                 if (index == categories.length) {
                   return _buildCategoryItem(
-                    icon: '+',
+                    icon: Icons.add,
                     label: '', 
                     color: Colors.grey,
                     onTap: () async {
