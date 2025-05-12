@@ -72,6 +72,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryOther => 'その他';
 
   @override
+  String get addCategory => 'カテゴリを追加';
+
+  @override
+  String get categoryName => 'カテゴリ名';
+
+  @override
+  String get selectIcon => 'アイコンを選択';
+
+  @override
+  String get selectColor => '色を選択';
+
+  @override
+  String get preview => 'プレビュー';
+
+  @override
+  String get categoryNameRequired => 'カテゴリ名は必須です';
+
+  @override
   String get noTransactions => '取引記録がありません';
 
   @override

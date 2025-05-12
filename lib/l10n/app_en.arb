@@ -21,6 +21,13 @@
   "categoryCommunication": "Communication",
   "categoryDaily": "Daily",
   "categoryOther": "Other",
+  "addCategory": "Add Category",
+  "categoryName": "Category Name",
+  "selectIcon": "Select Icon",
+  "selectColor": "Select Color",
+  "preview": "Preview",
+  "categoryNameRequired": "Category name is required",
+
   "noTransactions": "No transactions yet",
   "expense": "Expense",
   "totalExpense": "Total expense",

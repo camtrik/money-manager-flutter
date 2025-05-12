@@ -22,6 +22,12 @@
   "categoryCommunication": "通信",
   "categoryDaily": "日用品",
   "categoryOther": "その他",
+  "addCategory": "カテゴリを追加",
+  "categoryName": "カテゴリ名",
+  "selectIcon": "アイコンを選択",
+  "selectColor": "色を選択",
+  "preview": "プレビュー",
+  "categoryNameRequired": "カテゴリ名は必須です",
 
   "noTransactions": "取引記録がありません",
   "expense": "支出",

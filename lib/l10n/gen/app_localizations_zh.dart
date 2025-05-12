@@ -72,6 +72,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryOther => '其他';
 
   @override
+  String get addCategory => '添加类别';
+
+  @override
+  String get categoryName => '类别名称';
+
+  @override
+  String get selectIcon => '选择图标';
+
+  @override
+  String get selectColor => '选择颜色';
+
+  @override
+  String get preview => '预览';
+
+  @override
+  String get categoryNameRequired => '类别名称不能为空';
+
+  @override
   String get noTransactions => '暂无交易记录';
 
   @override

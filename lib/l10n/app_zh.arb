@@ -21,6 +21,13 @@
   "categoryCommunication": "通讯",
   "categoryDaily": "日用",
   "categoryOther": "其他",
+  "addCategory": "添加类别",
+  "categoryName": "类别名称",
+  "selectIcon": "选择图标",
+  "selectColor": "选择颜色",
+  "preview": "预览",  
+  "categoryNameRequired": "类别名称不能为空",
+
   "noTransactions": "暂无交易记录",
   "expense": "支出",
   "totalExpense": "总支出",
