@@ -27,13 +27,14 @@ class SelectCategorySheet extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
+              color: color, 
               borderRadius: BorderRadius.circular(28),
             ),
             child: Center(
               child: Icon(
                 icon,
                 size: 24,
+                color: Colors.white,
               ),
             ),
           ),
@@ -126,7 +127,6 @@ class SelectCategorySheet extends StatelessWidget {
                         Navigator.pop(context);
                       }
                     }
-
                   );
                 }
                 
@@ -140,7 +140,6 @@ class SelectCategorySheet extends StatelessWidget {
                     onCategorySelected(category);
                     Navigator.pop(context);
                   }
-                  
                 );
               }                
             )
@@ -148,6 +147,5 @@ class SelectCategorySheet extends StatelessWidget {
         ]
       )
     );
-    
   }
 }

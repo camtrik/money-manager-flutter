@@ -45,7 +45,6 @@ class CategoryScreen extends StatelessWidget {
     }
 
     final totalExpense = sums.values.fold(0.0, (a, b) => a + b);
-
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,10 +71,11 @@ class CategoryScreen extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 24,
-                      backgroundColor: Color(c.colorValue).withValues(alpha: 0.5),
+                      backgroundColor: Color(c.colorValue),
                       child: Icon(
                         c.icon,
                         size: 24,
+                        color: Colors.white, 
                       ),
                     ),
                     const SizedBox(height: 4),
