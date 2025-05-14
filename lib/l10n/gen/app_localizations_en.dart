@@ -30,6 +30,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleted => 'Deleted';
 
   @override
+  String get delete => 'Delete';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
   String get amount => 'Amount';
 
   @override
@@ -70,6 +76,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryOther => 'Other';
+
+  @override
+  String get addCategory => 'Add Category';
+
+  @override
+  String get categoryName => 'Category Name';
+
+  @override
+  String get selectIcon => 'Select Icon';
+
+  @override
+  String get selectColor => 'Select Color';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
+  String get categoryNameRequired => 'Category name is required';
 
   @override
   String get noTransactions => 'No transactions yet';

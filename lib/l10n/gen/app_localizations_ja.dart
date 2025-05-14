@@ -30,6 +30,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleted => '取引が削除されました';
 
   @override
+  String get delete => '削除';
+
+  @override
+  String get cancel => 'キャンセル';
+
+  @override
   String get amount => '金額';
 
   @override
@@ -51,7 +57,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryTransport => '交通';
 
   @override
-  String get categoryShopping => '買い物';
+  String get categoryShopping => 'ショッピング';
 
   @override
   String get categoryEntertainment => '娯楽';
@@ -60,7 +66,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryMedical => '医療';
 
   @override
-  String get categoryHousing => '住居';
+  String get categoryHousing => '住宅';
 
   @override
   String get categoryCommunication => '通信';
@@ -72,7 +78,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryOther => 'その他';
 
   @override
-  String get noTransactions => '取引記録がありません';
+  String get addCategory => 'カテゴリーを追加';
+
+  @override
+  String get categoryName => 'カテゴリー名';
+
+  @override
+  String get selectIcon => 'アイコンを選択';
+
+  @override
+  String get selectColor => '色を選択';
+
+  @override
+  String get preview => 'プレビュー';
+
+  @override
+  String get categoryNameRequired => 'カテゴリー名は必須です';
+
+  @override
+  String get noTransactions => '取引はまだありません';
 
   @override
   String get expense => '支出';
@@ -102,7 +126,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get startingBalance => '開始残高';
 
   @override
-  String get endingBalance => '期末残高';
+  String get endingBalance => '終了残高';
 
   @override
   String get bankCard => '銀行カード';

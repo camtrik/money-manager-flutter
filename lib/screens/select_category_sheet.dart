@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
+import 'package:money_manager/screens/add_category_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ class SelectCategorySheet extends StatelessWidget {
   const SelectCategorySheet({super.key, required this.onCategorySelected});
 
   Widget _buildCategoryItem({
-    required String icon,
+    required IconData icon,
     required String label,
     required Color color,
     String? amount,
@@ -26,13 +27,14 @@ class SelectCategorySheet extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
+              color: color, 
               borderRadius: BorderRadius.circular(28),
             ),
             child: Center(
-              child: Text(
+              child: Icon(
                 icon,
-                style: const TextStyle(fontSize: 24),
+                size: 24,
+                color: Colors.white,
               ),
             ),
           ),
@@ -112,12 +114,18 @@ class SelectCategorySheet extends StatelessWidget {
                 // Add item
                 if (index == categories.length) {
                   return _buildCategoryItem(
-                    icon: '+',
+                    icon: Icons.add,
                     label: '', 
                     color: Colors.grey,
-                    onTap: () {
-                      // TODO: Add new category
-                      Navigator.pop(context);
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AddCategoryScreen()),
+                      );
+                      if (result != null && result is Category) {
+                        onCategorySelected(result);
+                        Navigator.pop(context);
+                      }
                     }
                   );
                 }
@@ -132,7 +140,6 @@ class SelectCategorySheet extends StatelessWidget {
                     onCategorySelected(category);
                     Navigator.pop(context);
                   }
-                  
                 );
               }                
             )
@@ -140,6 +147,5 @@ class SelectCategorySheet extends StatelessWidget {
         ]
       )
     );
-    
   }
 }

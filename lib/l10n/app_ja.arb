@@ -7,6 +7,8 @@
   "newTransaction": "新規取引",
   "save": "保存",
   "deleted": "取引が削除されました",
+  "delete": "削除",
+  "cancel": "キャンセル",
   "amount": "金額",
   "category": "カテゴリー",
   "currency": "通貨",
@@ -15,15 +17,21 @@
 
   "categoryDining": "食事",
   "categoryTransport": "交通",
-  "categoryShopping": "買い物",
+  "categoryShopping": "ショッピング",
   "categoryEntertainment": "娯楽",
   "categoryMedical": "医療",
-  "categoryHousing": "住居",
+  "categoryHousing": "住宅",
   "categoryCommunication": "通信",
   "categoryDaily": "日用品",
   "categoryOther": "その他",
+  "addCategory": "カテゴリーを追加",
+  "categoryName": "カテゴリー名",
+  "selectIcon": "アイコンを選択",
+  "selectColor": "色を選択",
+  "preview": "プレビュー",
+  "categoryNameRequired": "カテゴリー名は必須です",
 
-  "noTransactions": "取引記録がありません",
+  "noTransactions": "取引はまだありません",
   "expense": "支出",
   "totalExpense": "総支出",
 
@@ -34,6 +42,6 @@
   "chinese": "中国語",
   "japanese": "日本語",
   "startingBalance": "開始残高",
-  "endingBalance": "期末残高",
+  "endingBalance": "終了残高",
   "bankCard": "銀行カード"
 }

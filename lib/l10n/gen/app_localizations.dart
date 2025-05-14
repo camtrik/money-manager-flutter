@@ -139,6 +139,18 @@ abstract class AppLocalizations {
   /// **'Deleted'**
   String get deleted;
 
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
   /// No description provided for @amount.
   ///
   /// In en, this message translates to:
@@ -222,6 +234,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get categoryOther;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Category'**
+  String get addCategory;
+
+  /// No description provided for @categoryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Name'**
+  String get categoryName;
+
+  /// No description provided for @selectIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Icon'**
+  String get selectIcon;
+
+  /// No description provided for @selectColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Color'**
+  String get selectColor;
+
+  /// No description provided for @preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get preview;
+
+  /// No description provided for @categoryNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name is required'**
+  String get categoryNameRequired;
 
   /// No description provided for @noTransactions.
   ///
