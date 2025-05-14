@@ -139,6 +139,18 @@ abstract class AppLocalizations {
   /// **'Deleted'**
   String get deleted;
 
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
   /// No description provided for @amount.
   ///
   /// In en, this message translates to:

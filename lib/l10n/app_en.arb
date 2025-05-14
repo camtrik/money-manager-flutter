@@ -7,6 +7,8 @@
   "newTransaction": "New Transaction",
   "save": "Save",
   "deleted": "Deleted",
+  "delete": "Delete",
+  "cancel": "Cancel",
   "amount": "Amount",
   "category": "Category",
   "currency": "Currency",

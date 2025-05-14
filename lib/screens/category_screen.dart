@@ -108,7 +108,7 @@ class CategoryScreen extends StatelessWidget {
       final hasExpense = amount > 0;
       
       gridItems[availablePositions[i]] = _buildCategoryItem(
-        category, amount, hasExpense, context
+        category, amount, hasExpense, context, i
       );
     }
     
@@ -238,7 +238,7 @@ class CategoryScreen extends StatelessWidget {
   }
 
   // Build category item
-  Widget _buildCategoryItem(Category category, double amount, bool hasExpense, BuildContext context) {
+  Widget _buildCategoryItem(Category category, double amount, bool hasExpense, BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -246,6 +246,100 @@ class CategoryScreen extends StatelessWidget {
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
           builder: (context) => AddTransactionSheet(category: category),
+        );
+      },
+      onLongPress: () {
+        // 显示确认删除的底部菜单
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 顶部拖拽条
+                    Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    
+                    // 类别信息
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Color(category.colorValue),
+                      child: Icon(
+                        category.icon,
+                        size: 28,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      CategoryUtils.getLocalizedName(context, category.id, category.name),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    
+                    // 删除按钮
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // 删除类别
+                          context.read<CategoryListModel>().remove(index);
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size.fromHeight(48),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          l10n.delete ?? '删除类别',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    
+                    // 取消按钮
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: TextButton.styleFrom(
+                          minimumSize: const Size.fromHeight(48),
+                        ),
+                        child: Text(
+                          l10n.cancel ?? '取消',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
       child: Column(

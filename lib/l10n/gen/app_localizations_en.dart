@@ -30,6 +30,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleted => 'Deleted';
 
   @override
+  String get delete => 'Delete';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
   String get amount => 'Amount';
 
   @override

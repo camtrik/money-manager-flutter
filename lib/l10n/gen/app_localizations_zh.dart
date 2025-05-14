@@ -9,19 +9,19 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => '记账应用';
+  String get appTitle => '记账本';
 
   @override
   String get settings => '设置';
 
   @override
-  String get categories => '类别';
+  String get categories => '分类';
 
   @override
   String get transactions => '交易';
 
   @override
-  String get newTransaction => '新增流水';
+  String get newTransaction => '新交易';
 
   @override
   String get save => '保存';
@@ -30,10 +30,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleted => '已删除交易';
 
   @override
+  String get delete => '删除';
+
+  @override
+  String get cancel => '取消';
+
+  @override
   String get amount => '金额';
 
   @override
-  String get category => '类别';
+  String get category => '分类';
 
   @override
   String get currency => '币种';
@@ -72,10 +78,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryOther => '其他';
 
   @override
-  String get addCategory => '添加类别';
+  String get addCategory => '添加分类';
 
   @override
-  String get categoryName => '类别名称';
+  String get categoryName => '分类名称';
 
   @override
   String get selectIcon => '选择图标';
@@ -87,7 +93,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preview => '预览';
 
   @override
-  String get categoryNameRequired => '类别名称不能为空';
+  String get categoryNameRequired => '分类名称不能为空';
 
   @override
   String get noTransactions => '暂无交易记录';
@@ -108,19 +114,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language => '语言';
 
   @override
-  String get english => '英文';
+  String get english => '英语';
 
   @override
   String get chinese => '中文';
 
   @override
-  String get japanese => '日文';
+  String get japanese => '日语';
 
   @override
   String get startingBalance => '起始余额';
 
   @override
-  String get endingBalance => '期末余额';
+  String get endingBalance => '结余';
 
   @override
   String get bankCard => '银行卡';
