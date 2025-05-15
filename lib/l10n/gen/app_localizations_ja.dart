@@ -96,6 +96,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryNameRequired => 'カテゴリー名は必須です';
 
   @override
+  String confirmDeleteCategory(Object name) {
+    return '「$name」カテゴリを削除してもよろしいですか？';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return 'これにより関連する取引($count)も削除されます。';
+  }
+
+  @override
   String get noTransactions => '取引はまだありません';
 
   @override

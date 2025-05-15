@@ -38,6 +38,22 @@ class StorageService {
 
   Future<void> deleteTx(int idx) => txBox.deleteAt(idx);
 
+  Future<void> deleteTxByCategory(String categoryId) async {
+    List<int> indicesToDelete = [];
+
+    for (int i = 0; i < txBox.length; i++) {
+      final tx = txBox.getAt(i);
+      if (tx != null && tx.category.id == categoryId) {
+        indicesToDelete.add(i);
+      }
+    }
+
+    // delete from back to front, avoid index change 
+    for (int i = indicesToDelete.length - 1; i >= 0; i--) {
+      await txBox.deleteAt(indicesToDelete[i]);
+    }
+  }
+
   // Category CRUD 
   Box<Category> get categoryBox => Hive.box<Category>('categories');
 

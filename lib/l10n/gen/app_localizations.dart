@@ -271,6 +271,18 @@ abstract class AppLocalizations {
   /// **'Category name is required'**
   String get categoryNameRequired;
 
+  /// No description provided for @confirmDeleteCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the \"{name}\" category?'**
+  String confirmDeleteCategory(Object name);
+
+  /// No description provided for @deleteRelatedTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'This will also delete all related transactions({count}).'**
+  String deleteRelatedTransactions(Object count);
+
   /// No description provided for @noTransactions.
   ///
   /// In en, this message translates to:

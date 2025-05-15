@@ -96,6 +96,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryNameRequired => '分类名称不能为空';
 
   @override
+  String confirmDeleteCategory(Object name) {
+    return '确定要删除 $name 吗？';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return '与该类别关联的所有交易记录($count)将会被删除。';
+  }
+
+  @override
   String get noTransactions => '暂无交易记录';
 
   @override

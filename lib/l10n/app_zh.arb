@@ -29,6 +29,8 @@
   "selectColor": "选择颜色",
   "preview": "预览",  
   "categoryNameRequired": "分类名称不能为空",
+  "confirmDeleteCategory": "确定要删除 {name} 吗？",
+  "deleteRelatedTransactions": "与该类别关联的所有交易记录({count})将会被删除。",
 
   "noTransactions": "暂无交易记录",
   "expense": "支出",

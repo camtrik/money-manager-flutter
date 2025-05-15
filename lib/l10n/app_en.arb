@@ -29,6 +29,8 @@
   "selectColor": "Select Color",
   "preview": "Preview",
   "categoryNameRequired": "Category name is required",
+  "confirmDeleteCategory": "Are you sure you want to delete the \"{name}\" category?",
+  "deleteRelatedTransactions": "This will also delete all related transactions({count}).",
 
   "noTransactions": "No transactions yet",
   "expense": "Expense",
