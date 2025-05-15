@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
+import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
@@ -17,99 +18,6 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   Color _selectedColor = Colors.purple; // Default color
   int _currentIndex = 0; // 0 for icon selection, 1 for color selection
   
-  // List of common emoji icons to choose from
-  final List<IconData> _icons = [
-    // Food & Dining
-    Icons.restaurant, Icons.fastfood, Icons.local_cafe, Icons.local_bar, Icons.local_pizza, Icons.bakery_dining,
-    // Transport
-    Icons.directions_car, Icons.directions_bus, Icons.train, Icons.flight, Icons.directions_bike, Icons.electric_scooter,
-    // Shopping
-    Icons.shopping_cart, Icons.shopping_bag, Icons.store, Icons.shopping_basket, Icons.redeem, Icons.card_giftcard,
-    // Entertainment
-    Icons.movie, Icons.sports_esports, Icons.sports, Icons.music_note, Icons.theaters, Icons.nightlife,
-    // Health & Medical
-    Icons.medical_services, Icons.local_hospital, Icons.medication, Icons.fitness_center, Icons.spa, Icons.sports_tennis,
-    // Home & Living
-    Icons.house, Icons.home_repair_service, Icons.cleaning_services, Icons.shower, Icons.lightbulb, Icons.bed,
-    // Communication & Electronics
-    Icons.smartphone, Icons.computer, Icons.phone, Icons.tv, Icons.headphones, Icons.camera_alt,
-    // Daily necessities & Misc
-    Icons.pets, Icons.child_care, Icons.school, Icons.book, Icons.savings, Icons.work, 
-    // Others
-    Icons.attach_money, Icons.credit_card, Icons.payments, Icons.receipt_long, Icons.extension, Icons.question_mark,
-  ];
-
-  // List of material colors to choose from
-  final List<Color> _colors = [
-    // Reds
-    Colors.red,
-    Colors.red.shade300,
-    Colors.red.shade800,
-    Colors.redAccent,
-    
-    // Pinks
-    Colors.pink,
-    Colors.pink.shade300,
-    Colors.pink.shade800,
-    Colors.pinkAccent,
-    
-    // Purples
-    Colors.purple,
-    Colors.purple.shade300,
-    Colors.purple.shade800,
-    Colors.purpleAccent,
-    Colors.deepPurple,
-    Colors.deepPurple.shade300,
-    
-    // Blues
-    Colors.indigo,
-    Colors.indigo.shade300,
-    Colors.blue,
-    Colors.blue.shade300,
-    Colors.blue.shade800,
-    Colors.blueAccent,
-    Colors.lightBlue,
-    Colors.lightBlue.shade300,
-    
-    // Cyans & Teals
-    Colors.cyan,
-    Colors.cyan.shade300,
-    Colors.teal,
-    Colors.teal.shade300,
-    
-    // Greens
-    Colors.green,
-    Colors.green.shade300,
-    Colors.green.shade800,
-    Colors.greenAccent,
-    Colors.lightGreen,
-    Colors.lightGreen.shade300,
-    
-    // Yellows & Ambers
-    Colors.lime,
-    Colors.lime.shade300,
-    Colors.yellow,
-    Colors.yellow.shade600,
-    Colors.amber,
-    Colors.amber.shade300,
-    
-    // Oranges
-    Colors.orange,
-    Colors.orange.shade300,
-    Colors.orange.shade800,
-    Colors.orangeAccent,
-    Colors.deepOrange,
-    Colors.deepOrange.shade300,
-    
-    // Browns & Greys
-    Colors.brown,
-    Colors.brown.shade300,
-    Colors.grey,
-    Colors.grey.shade600,
-    Colors.blueGrey,
-    Colors.blueGrey.shade300,
-  ];
-
 
   @override
   void dispose() {
@@ -122,7 +30,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       // Show error if name is empty
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.categoryNameRequired ?? 'Category name is required'),
+          content: Text(AppLocalizations.of(context)!.categoryNameRequired),
           backgroundColor: Colors.red,
         ),
       );
@@ -151,9 +59,9 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
       ),
-      itemCount: _icons.length,
+      itemCount: CategoryUtils.icons.length,
       itemBuilder: (context, index) {
-        final icon = _icons[index];
+        final icon = CategoryUtils.icons[index];
         final isSelected = icon == _selectedIcon;
         
         return InkWell(
@@ -164,16 +72,17 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: isSelected ? _selectedColor.withOpacity(0.2) : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: isSelected 
-                  ? Border.all(color: _selectedColor, width: 2)
-                  : Border.all(color: Colors.grey.withOpacity(0.3)),
+              color: isSelected ? _selectedColor : Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(16),
+              // border: isSelected 
+              //     ? Border.all(color: _selectedColor, width: 2)
+              //     : Border.all(color: Colors.grey.withOpacity(0.3)),
             ),
             child: Center(
               child: Icon(
                 icon,
                 size: 32,
+                color: isSelected ? Colors.white : Colors.black,
               ),
             ),
           ),
@@ -190,10 +99,10 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
       ),
-      itemCount: _colors.length,
+      itemCount: CategoryUtils.colors.length,
       itemBuilder: (context, index) {
-        final color = _colors[index];
-        final isSelected = color.value == _selectedColor.value;
+        final color = CategoryUtils.colors[index];
+        final isSelected = color.toARGB32() == _selectedColor.toARGB32();
         
         return InkWell(
           onTap: () {
@@ -232,7 +141,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
-            Text(l10n.addCategory ?? 'Add Category'),
+            Text(l10n.addCategory),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -274,7 +183,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        l10n.categoryName ?? 'Category Name',
+                        l10n.categoryName,
                         style: const TextStyle(fontSize: 18),
                       ),
                       TextField(
@@ -293,7 +202,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: _selectedColor.withOpacity(0.2),
+                    color: _selectedColor,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: Colors.grey.shade300,
@@ -304,6 +213,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     child: Icon(
                       _selectedIcon,
                       size: 36,
+                      color: Colors.white,
                     ),
                   ),
                 ),
