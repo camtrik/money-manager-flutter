@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
-import 'package:money_manager/screens/add_category_screen.dart';
+import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
@@ -457,7 +457,7 @@ class CategoryScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const AddCategoryScreen(),
+            builder: (context) => const EditCategoryScreen(),
           ),
         );
       },

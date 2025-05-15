@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
-import 'package:money_manager/screens/add_category_screen.dart';
+import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
@@ -120,7 +120,7 @@ class SelectCategorySheet extends StatelessWidget {
                     onTap: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AddCategoryScreen()),
+                        MaterialPageRoute(builder: (context) => const EditCategoryScreen()),
                       );
                       if (result != null && result is Category) {
                         onCategorySelected(result);
