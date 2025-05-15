@@ -21,10 +21,15 @@ class TxListModel extends ChangeNotifier {
     });
   }
 
-  void remove(int idx) {
-    _storage.deleteTx(idx).then((_) {
-      _all = _storage.getAllTx();
-      notifyListeners();
-    });
+  Future<void> remove(int idx) async {
+    await _storage.deleteTx(idx);
+    _all = _storage.getAllTx();
+    notifyListeners();
+  }
+
+  Future<void> removeByCategory(String categoryId) async {
+    await _storage.deleteTxByCategory(categoryId);
+    _all = _storage.getAllTx();
+    notifyListeners();
   }
 }

@@ -249,7 +249,6 @@ class CategoryScreen extends StatelessWidget {
         );
       },
       onLongPress: () {
-        // 显示确认删除的底部菜单
         showModalBottomSheet(
           context: context,
           backgroundColor: Colors.white,
@@ -258,13 +257,14 @@ class CategoryScreen extends StatelessWidget {
           ),
           builder: (context) {
             final l10n = AppLocalizations.of(context)!;
+        
             return SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 顶部拖拽条
+                    
                     Container(
                       width: 40,
                       height: 4,
@@ -275,7 +275,7 @@ class CategoryScreen extends StatelessWidget {
                       ),
                     ),
                     
-                    // 类别信息
+                    // category info
                     CircleAvatar(
                       radius: 30,
                       backgroundColor: Color(category.colorValue),
@@ -294,15 +294,77 @@ class CategoryScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
-                    // 删除按钮
+                                        
+                    // delete button
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: ElevatedButton(
                         onPressed: () {
-                          // 删除类别
-                          context.read<CategoryListModel>().remove(index);
-                          Navigator.pop(context);
+                          
+
+                          final txList = context.read<TxListModel>();
+                          final relatedTxCount = txList.all.where(
+                            (tx) => tx.category.id == category.id
+                          ).length;
+                          
+                          // dialog with animation
+                          showGeneralDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                            barrierColor: Colors.black54,
+                            transitionDuration: const Duration(milliseconds: 200),
+                            pageBuilder: (context, _, __) => AlertDialog(
+                              title: Text(l10n.delete),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(l10n.confirmDeleteCategory(CategoryUtils.getLocalizedName(context, category.id, category.name))),                                  
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12),
+                                    child: Text(
+                                      l10n.deleteRelatedTransactions(relatedTxCount),
+                                      style: TextStyle(
+                                        color: Colors.red.shade700,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(l10n.cancel),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    context.read<CategoryListModel>().remove(
+                                      index, 
+                                      context.read<TxListModel>()
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.red,
+                                  ),
+                                  child: Text(l10n.delete),
+                                ),
+                              ],
+                            ),
+                            transitionBuilder: (context, animation, secondaryAnimation, child) {
+                              // simple animation fade + scale 
+                              return FadeTransition(
+                                opacity: animation,
+                                child: ScaleTransition(
+                                  scale: animation,
+                                  child: child,
+                                ),
+                              );
+                            },
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -313,13 +375,13 @@ class CategoryScreen extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          l10n.delete ?? '删除类别',
+                          l10n.delete,
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
                     ),
                     
-                    // 取消按钮
+                    // cancel
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                       child: TextButton(
@@ -330,7 +392,7 @@ class CategoryScreen extends StatelessWidget {
                           minimumSize: const Size.fromHeight(48),
                         ),
                         child: Text(
-                          l10n.cancel ?? '取消',
+                          l10n.cancel,
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),

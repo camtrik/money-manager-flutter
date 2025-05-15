@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/services/storage_service.dart';
+import 'package:money_manager/view_models/tx_list_model.dart';
 
 class CategoryListModel extends ChangeNotifier {
   final _storage = StorageService();
@@ -55,11 +56,11 @@ class CategoryListModel extends ChangeNotifier {
     });
   }
 
-  void remove(int idx) {
-    _storage.deleteCategory(idx).then((_) {
-      _all = _storage.getAllCategories();
-      notifyListeners();
-    });
+  Future<void> remove(int idx, TxListModel txListModel) async {
+    await txListModel.removeByCategory(_all[idx].id);
+    await _storage.deleteCategory(idx);
+    _all = _storage.getAllCategories();
+    notifyListeners();
   }
 
   Category? getById(String id) {

@@ -30,6 +30,8 @@
   "selectColor": "色を選択",
   "preview": "プレビュー",
   "categoryNameRequired": "カテゴリー名は必須です",
+  "confirmDeleteCategory": "「{name}」カテゴリを削除してもよろしいですか？",
+  "deleteRelatedTransactions": "これにより関連する取引({count})も削除されます。",
 
   "noTransactions": "取引はまだありません",
   "expense": "支出",

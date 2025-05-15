@@ -96,6 +96,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryNameRequired => 'Category name is required';
 
   @override
+  String confirmDeleteCategory(Object name) {
+    return 'Are you sure you want to delete the \"$name\" category?';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return 'This will also delete all related transactions($count).';
+  }
+
+  @override
   String get noTransactions => 'No transactions yet';
 
   @override
