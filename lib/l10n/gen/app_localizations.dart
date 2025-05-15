@@ -241,6 +241,12 @@ abstract class AppLocalizations {
   /// **'Add Category'**
   String get addCategory;
 
+  /// No description provided for @editCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
+
   /// No description provided for @categoryName.
   ///
   /// In en, this message translates to:

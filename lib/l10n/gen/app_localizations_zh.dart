@@ -81,6 +81,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addCategory => '添加分类';
 
   @override
+  String get editCategory => '编辑分类';
+
+  @override
   String get categoryName => '分类名称';
 
   @override

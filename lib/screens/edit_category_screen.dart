@@ -5,14 +5,14 @@ import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
-class AddCategoryScreen extends StatefulWidget {
-  const AddCategoryScreen({super.key});
+class EditCategoryScreen extends StatefulWidget {
+  const EditCategoryScreen({super.key});
 
   @override
-  State<AddCategoryScreen> createState() => _AddCategoryScreenState();
+  State<EditCategoryScreen> createState() => _EditCategoryScreenState();
 }
 
-class _AddCategoryScreenState extends State<AddCategoryScreen> {
+class _EditCategoryScreenState extends State<EditCategoryScreen> {
   final TextEditingController _nameController = TextEditingController();
   IconData _selectedIcon = Icons.question_mark; // Default icon
   Color _selectedColor = Colors.purple; // Default color
@@ -141,7 +141,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
-            Text(l10n.addCategory),
+            Text(l10n.editCategory),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
