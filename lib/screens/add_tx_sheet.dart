@@ -22,7 +22,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
   String _amount = '0';
   String _currency = 'CNY';
   DateTime _date = DateTime.now();
-  final TextEditingController _remarkController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
   late Category _selectedCategory;
   
   @override
@@ -72,6 +72,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
         amount: amount,
         currency: _currency,
         category: _selectedCategory,
+        notes: _notesController.text.trim(), 
         occurredAt: _date,
       );
       context.read<TxListModel>().add(transaction);
@@ -110,7 +111,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
 
   @override
   void dispose() {
-    _remarkController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -211,7 +212,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
-              controller: _remarkController,
+              controller: _notesController,
               decoration: InputDecoration(
                 hintText: l10n.notes,
                 border: OutlineInputBorder(
@@ -289,7 +290,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              '${l10n.today}, ${DateFormatter.formatDate(_date, context)}',
+              '${l10n.today}, ${DateFormatter.formatDate(context, _date)}',
               style: TextStyle(color: Colors.grey.shade600),
             ),
           ),
