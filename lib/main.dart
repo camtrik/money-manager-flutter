@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
+import 'package:money_manager/routes/app_routes.dart';
+import 'package:money_manager/routes/route_generator.dart';
 import 'package:money_manager/screens/settings_screen.dart';
 import 'package:money_manager/screens/tx_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
@@ -100,48 +102,8 @@ class _MyAppState extends State<MyApp> {
             Locale('ja'),
           ],
           title: 'Money Manager',
-          home: Builder(
-            builder: (context) {
-              final l10n = AppLocalizations.of(context)!; 
-              return Scaffold(
-                appBar: AppBar(
-                  // title: Text(l10n.appTitle), 
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.settings),
-                      onPressed: () {
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (context) => const SettingsScreen())
-                        );
-                      }
-                    )
-                  ]
-                ),
-
-                body: _pages[_currentIndex],
-                bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: _currentIndex,
-                  items: <BottomNavigationBarItem> [
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.pie_chart),
-                      label: l10n.categories, 
-                    ), 
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.list),
-                      label: l10n.transactions
-                    )
-                  ],
-                  onTap: (int index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                ),
-              );
-            }
-          
-          )
+          initialRoute: AppRoutes.home, 
+          onGenerateRoute: RouteGenerator.generateRoute,
         );
       }
     );
