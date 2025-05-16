@@ -56,11 +56,30 @@ class CategoryListModel extends ChangeNotifier {
     });
   }
 
-  Future<void> remove(int idx, TxListModel txListModel) async {
+  Future<void> remove(Category removedCategory, TxListModel txListModel) async {
+    int idx = _all.indexWhere((c) => c.id == removedCategory.id);
+    if (idx != -1) {
+      await txListModel.removeByCategory(removedCategory.id);
+      await _storage.deleteCategory(idx);
+      _all.removeAt(idx);
+      notifyListeners();
+    }
+  }
+
+  Future<void> removeByIdx(int idx, TxListModel txListModel) async {
     await txListModel.removeByCategory(_all[idx].id);
     await _storage.deleteCategory(idx);
     _all = _storage.getAllCategories();
     notifyListeners();
+  }
+
+  Future<void> update(Category updatedCategory) async {
+    int idx = _all.indexWhere((c) => c.id == updatedCategory.id);
+    if (idx != -1) {
+      await _storage.updateCategory(idx, updatedCategory);
+      _all[idx] = updatedCategory;
+      notifyListeners();
+    }
   }
 
   Category? getById(String id) {
