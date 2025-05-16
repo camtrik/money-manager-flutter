@@ -341,7 +341,7 @@ class CategoryScreen extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    context.read<CategoryListModel>().remove(
+                                    context.read<CategoryListModel>().removeByIdx(
                                       index, 
                                       context.read<TxListModel>()
                                     );
@@ -370,12 +370,37 @@ class CategoryScreen extends StatelessWidget {
                           backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                          // shape: RoundedRectangleBorder(
+                          //   borderRadius: BorderRadius.circular(8),
+                          // ),
                         ),
                         child: Text(
                           l10n.delete,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    
+                    // edit button
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditCategoryScreen(category: category),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color(category.colorValue).withValues(alpha: 0.8),
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size.fromHeight(48),
+                        ),
+                        child: Text(
+                          l10n.edit,
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),

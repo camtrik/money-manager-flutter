@@ -6,7 +6,8 @@ import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
 class EditCategoryScreen extends StatefulWidget {
-  const EditCategoryScreen({super.key});
+  final Category? category;
+  const EditCategoryScreen({super.key, this.category});
 
   @override
   State<EditCategoryScreen> createState() => _EditCategoryScreenState();
@@ -14,10 +15,20 @@ class EditCategoryScreen extends StatefulWidget {
 
 class _EditCategoryScreenState extends State<EditCategoryScreen> {
   final TextEditingController _nameController = TextEditingController();
-  IconData _selectedIcon = Icons.question_mark; // Default icon
-  Color _selectedColor = Colors.purple; // Default color
+  late IconData _selectedIcon;
+  late Color _selectedColor;
   int _currentIndex = 0; // 0 for icon selection, 1 for color selection
+  bool _isEditMode = false;
   
+  @override
+  void initState() {
+    super.initState();
+    _isEditMode = widget.category != null; 
+    _selectedIcon = _isEditMode ? widget.category!.icon : Icons.question_mark;
+    _selectedColor = _isEditMode ? Color(widget.category!.colorValue) : Colors.purple;
+    _nameController.text = _isEditMode ? widget.category!.name : '';
+    print('🚀 initState: _isEditMode: $_isEditMode');
+  }
 
   @override
   void dispose() {
@@ -36,19 +47,27 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
       );
       return;
     }
+    if (_isEditMode) {
+      // Update existing category
+      final updatedCategory = Category(
+        id: widget.category!.id,
+        name: _nameController.text.trim(),
+        icon: _selectedIcon,
+        colorValue: _selectedColor.toARGB32(),
+      );
+      context.read<CategoryListModel>().update(updatedCategory);
+    } else {
+      // Create new category
+      final category = Category(
+        name: _nameController.text.trim(),
+        icon: _selectedIcon,
+        colorValue: _selectedColor.toARGB32(),
+      );
+      context.read<CategoryListModel>().add(category);
+    }
 
-    // Create new category
-    final category = Category(
-      name: _nameController.text.trim(),
-      icon: _selectedIcon,
-      colorValue: _selectedColor.value,
-    );
-
-    // Add to category list
-    context.read<CategoryListModel>().add(category);
-    
     // Return to previous screen
-    Navigator.pop(context, category);
+    Navigator.pop(context);
   }
   
   Widget _buildIconGrid() {
@@ -118,7 +137,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                   ? Border.all(color: Colors.white, width: 3)
                   : null,
               boxShadow: isSelected
-                  ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 8)]
+                  ? [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 8)]
                   : null,
             ),
           ),
@@ -141,7 +160,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
-            Text(l10n.editCategory),
+            Text(_isEditMode ? l10n.editCategory : l10n.addCategory),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -187,6 +206,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         style: const TextStyle(fontSize: 18),
                       ),
                       TextField(
+                        
                         controller: _nameController,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
@@ -238,7 +258,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                       ),
                     ),
                     child: Text(
-                      l10n.selectIcon ?? 'Select Icon',
+                      l10n.selectIcon,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: _currentIndex == 0 ? _selectedColor : Colors.grey.shade600,
@@ -263,7 +283,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                       ),
                     ),
                     child: Text(
-                      l10n.selectColor ?? 'Select Color',
+                      l10n.selectColor,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: _currentIndex == 1 ? _selectedColor : Colors.grey.shade600,

@@ -63,6 +63,8 @@ class StorageService {
 
   Future<void> deleteCategory(int idx) => categoryBox.deleteAt(idx);
 
+  Future<void> updateCategory(int idx, Category c) => categoryBox.putAt(idx, c);
+
   // Settings 
   Box<Settings> get settingsBox => Hive.box<Settings>('settings');
 

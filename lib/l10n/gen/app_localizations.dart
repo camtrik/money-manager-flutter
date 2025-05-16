@@ -145,6 +145,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
