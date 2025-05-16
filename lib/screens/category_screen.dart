@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
+import 'package:money_manager/routes/app_routes.dart';
 import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
@@ -387,12 +388,7 @@ class CategoryScreen extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditCategoryScreen(category: category),
-                            ),
-                          );
+                          Navigator.pushNamed(context, AppRoutes.editCategory, arguments: category);
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Color(category.colorValue).withValues(alpha: 0.8),
@@ -479,12 +475,7 @@ class CategoryScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigate to add category screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const EditCategoryScreen(),
-          ),
-        );
+        Navigator.pushNamed(context, AppRoutes.addCategory);
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
