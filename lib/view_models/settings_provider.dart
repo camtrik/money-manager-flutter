@@ -3,11 +3,11 @@ import 'package:money_manager/models/settings.dart';
 import 'package:money_manager/services/storage_service.dart';
 
 class SettingsProvider extends ChangeNotifier {
-  final _storage = StorageService();
-  Settings _settings = Settings();
+  final StorageService _storage;
+  late Settings _settings;
 
-  SettingsProvider() {
-    final _settings = _storage.getSettings();
+  SettingsProvider(this._storage) {
+    _settings = _storage.getSettings();
   }
 
   Locale get locale => Locale(_settings.languageCode);

@@ -4,16 +4,17 @@ import 'package:money_manager/services/storage_service.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 
 class CategoryListModel extends ChangeNotifier {
-  final _storage = StorageService();
+  final StorageService _storage; 
 
   List<Category> _all = [];
 
   List<Category> get all => _all;
 
-  CategoryListModel() {
+  CategoryListModel(this._storage) {
     print('🚀 CategoryListModel constructor called');
-
-    _init();
+    _all = _storage.getAllCategories();
+    notifyListeners();
+    // _init();
   }
 
   Future<void> _init() async {
