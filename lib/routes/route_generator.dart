@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/routes/app_routes.dart';
+import 'package:money_manager/screens/add_tx_sheet.dart';
 import 'package:money_manager/screens/category_screen.dart';
 import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/home_screen.dart';
@@ -32,9 +33,37 @@ class RouteGenerator {
         }
         return _errorRoute();
 
+      // never used 
+      case AppRoutes.addTransaction:
+        if (args is Category) {
+          return _buildModalBottomSheetRoute(
+            AddTransactionSheet(category: args),
+            isFullScreenDialog: true, 
+          );
+        }
+        return _errorRoute();
+
       default: 
         return _errorRoute();
     }
+  }
+
+  // never used in practice 
+  static Route<dynamic> _buildModalBottomSheetRoute(Widget sheet, {isFullScreenDialog = false}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => sheet, 
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child, 
+        );
+      },
+      fullscreenDialog: isFullScreenDialog, 
+    );
   }
 
   static Route<dynamic> _errorRoute() {
