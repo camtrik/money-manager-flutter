@@ -33,6 +33,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get delete => '削除';
 
   @override
+  String get edit => '編集';
+
+  @override
   String get cancel => 'キャンセル';
 
   @override
@@ -81,6 +84,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get addCategory => 'カテゴリーを追加';
 
   @override
+  String get editCategory => 'カテゴリーを編集';
+
+  @override
   String get categoryName => 'カテゴリー名';
 
   @override
@@ -94,6 +100,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'カテゴリー名は必須です';
+
+  @override
+  String confirmDeleteCategory(Object name) {
+    return '「$name」カテゴリを削除してもよろしいですか？';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return 'これにより関連する取引($count)も削除されます。';
+  }
 
   @override
   String get noTransactions => '取引はまだありません';

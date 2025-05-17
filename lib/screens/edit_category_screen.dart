@@ -1,57 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
+import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 
-class AddCategoryScreen extends StatefulWidget {
-  const AddCategoryScreen({super.key});
+class EditCategoryScreen extends StatefulWidget {
+  final Category? category;
+  const EditCategoryScreen({super.key, this.category});
 
   @override
-  State<AddCategoryScreen> createState() => _AddCategoryScreenState();
+  State<EditCategoryScreen> createState() => _EditCategoryScreenState();
 }
 
-class _AddCategoryScreenState extends State<AddCategoryScreen> {
+class _EditCategoryScreenState extends State<EditCategoryScreen> {
   final TextEditingController _nameController = TextEditingController();
-  IconData _selectedIcon = Icons.question_mark; // Default icon
-  Color _selectedColor = Colors.purple; // Default color
+  late IconData _selectedIcon;
+  late Color _selectedColor;
   int _currentIndex = 0; // 0 for icon selection, 1 for color selection
+  bool _isEditMode = false;
   
-  // List of common emoji icons to choose from
-  final List<IconData> _icons = [
-    Icons.restaurant, Icons.directions_bus, Icons.restaurant, Icons.restaurant, Icons.restaurant, Icons.restaurant, 
-    Icons.directions_car, Icons.directions_bus, Icons.directions_car, Icons.directions_car, Icons.train, Icons.directions_bus,
-    Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart, Icons.shopping_cart,
-    Icons.movie, Icons.gamepad, Icons.directions_bus, Icons.palette, Icons.theater_comedy, Icons.directions_bus,
-    Icons.medical_services, Icons.local_hospital, Icons.local_hospital, Icons.local_hospital, Icons.directions_bus, Icons.directions_bus,
-    Icons.house, Icons.directions_bus, Icons.lightbulb, Icons.shower, Icons.recycling, Icons.soap,
-    Icons.smartphone, Icons.computer, Icons.phone, Icons.tv, Icons.directions_bus, Icons.camera,
-    Icons.cleaning_services, Icons.soap, Icons.receipt, Icons.receipt, Icons.receipt, Icons.receipt,
-    Icons.question_mark, Icons.school, Icons.directions_bus, Icons.directions_bus, Icons.directions_bus, Icons.directions_bus,
-  ];
-  
-  // List of material colors to choose from
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.deepPurple,
-    Colors.indigo,
-    Colors.blue,
-    Colors.lightBlue,
-    Colors.cyan,
-    Colors.teal,
-    Colors.green,
-    Colors.lightGreen,
-    Colors.lime,
-    Colors.yellow,
-    Colors.amber,
-    Colors.orange,
-    Colors.deepOrange,
-    Colors.brown,
-    Colors.grey,
-    Colors.blueGrey,
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _isEditMode = widget.category != null; 
+    _selectedIcon = _isEditMode ? widget.category!.icon : Icons.question_mark;
+    _selectedColor = _isEditMode ? Color(widget.category!.colorValue) : Colors.purple;
+    _nameController.text = _isEditMode ? widget.category!.name : '';
+    print('🚀 initState: _isEditMode: $_isEditMode');
+  }
 
   @override
   void dispose() {
@@ -64,25 +41,33 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       // Show error if name is empty
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.categoryNameRequired ?? 'Category name is required'),
+          content: Text(AppLocalizations.of(context)!.categoryNameRequired),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
+    if (_isEditMode) {
+      // Update existing category
+      final updatedCategory = Category(
+        id: widget.category!.id,
+        name: _nameController.text.trim(),
+        icon: _selectedIcon,
+        colorValue: _selectedColor.toARGB32(),
+      );
+      context.read<CategoryListModel>().update(updatedCategory);
+    } else {
+      // Create new category
+      final category = Category(
+        name: _nameController.text.trim(),
+        icon: _selectedIcon,
+        colorValue: _selectedColor.toARGB32(),
+      );
+      context.read<CategoryListModel>().add(category);
+    }
 
-    // Create new category
-    final category = Category(
-      name: _nameController.text.trim(),
-      icon: _selectedIcon,
-      colorValue: _selectedColor.value,
-    );
-
-    // Add to category list
-    context.read<CategoryListModel>().add(category);
-    
     // Return to previous screen
-    Navigator.pop(context, category);
+    Navigator.pop(context);
   }
   
   Widget _buildIconGrid() {
@@ -93,9 +78,9 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
       ),
-      itemCount: _icons.length,
+      itemCount: CategoryUtils.icons.length,
       itemBuilder: (context, index) {
-        final icon = _icons[index];
+        final icon = CategoryUtils.icons[index];
         final isSelected = icon == _selectedIcon;
         
         return InkWell(
@@ -106,16 +91,17 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: isSelected ? _selectedColor.withOpacity(0.2) : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: isSelected 
-                  ? Border.all(color: _selectedColor, width: 2)
-                  : Border.all(color: Colors.grey.withOpacity(0.3)),
+              color: isSelected ? _selectedColor : Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(16),
+              // border: isSelected 
+              //     ? Border.all(color: _selectedColor, width: 2)
+              //     : Border.all(color: Colors.grey.withOpacity(0.3)),
             ),
             child: Center(
               child: Icon(
                 icon,
                 size: 32,
+                color: isSelected ? Colors.white : Colors.black,
               ),
             ),
           ),
@@ -132,10 +118,10 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
       ),
-      itemCount: _colors.length,
+      itemCount: CategoryUtils.colors.length,
       itemBuilder: (context, index) {
-        final color = _colors[index];
-        final isSelected = color.value == _selectedColor.value;
+        final color = CategoryUtils.colors[index];
+        final isSelected = color.toARGB32() == _selectedColor.toARGB32();
         
         return InkWell(
           onTap: () {
@@ -151,7 +137,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   ? Border.all(color: Colors.white, width: 3)
                   : null,
               boxShadow: isSelected
-                  ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 8)]
+                  ? [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 8)]
                   : null,
             ),
           ),
@@ -174,7 +160,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
-            Text(l10n.addCategory ?? 'Add Category'),
+            Text(_isEditMode ? l10n.editCategory : l10n.addCategory),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -216,10 +202,11 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        l10n.categoryName ?? 'Category Name',
+                        l10n.categoryName,
                         style: const TextStyle(fontSize: 18),
                       ),
                       TextField(
+                        
                         controller: _nameController,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
@@ -235,7 +222,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: _selectedColor.withOpacity(0.2),
+                    color: _selectedColor,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: Colors.grey.shade300,
@@ -246,6 +233,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     child: Icon(
                       _selectedIcon,
                       size: 36,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -270,7 +258,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                       ),
                     ),
                     child: Text(
-                      l10n.selectIcon ?? 'Select Icon',
+                      l10n.selectIcon,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: _currentIndex == 0 ? _selectedColor : Colors.grey.shade600,
@@ -295,7 +283,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                       ),
                     ),
                     child: Text(
-                      l10n.selectColor ?? 'Select Color',
+                      l10n.selectColor,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: _currentIndex == 1 ? _selectedColor : Colors.grey.shade600,

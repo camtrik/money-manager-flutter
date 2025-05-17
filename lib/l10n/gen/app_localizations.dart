@@ -145,6 +145,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
@@ -241,6 +247,12 @@ abstract class AppLocalizations {
   /// **'Add Category'**
   String get addCategory;
 
+  /// No description provided for @editCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
+
   /// No description provided for @categoryName.
   ///
   /// In en, this message translates to:
@@ -270,6 +282,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category name is required'**
   String get categoryNameRequired;
+
+  /// No description provided for @confirmDeleteCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the \"{name}\" category?'**
+  String confirmDeleteCategory(Object name);
+
+  /// No description provided for @deleteRelatedTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'This will also delete all related transactions({count}).'**
+  String deleteRelatedTransactions(Object count);
 
   /// No description provided for @noTransactions.
   ///

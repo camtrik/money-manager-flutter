@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
+import 'package:money_manager/routes/app_routes.dart';
+import 'package:money_manager/routes/route_generator.dart';
 import 'package:money_manager/screens/settings_screen.dart';
 import 'package:money_manager/screens/tx_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
@@ -25,11 +27,40 @@ class LocaleProvider extends ChangeNotifier {
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await StorageService.init(); // 初始化 Hive 本地存储
+  final storageService = StorageService();
+  await storageService.init();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LocaleProvider())
+        Provider<StorageService>.value(value: storageService), 
+
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+
+        ChangeNotifierProxyProvider<StorageService, CategoryListModel>(
+          create: (context) => CategoryListModel(
+            Provider.of<StorageService>(context, listen: false)
+          ),
+          update: (context, storage, previous) => 
+            previous ?? CategoryListModel(storage),
+        ),
+
+        ChangeNotifierProxyProvider<StorageService, TxListModel>(
+          create: (context) => TxListModel(
+            Provider.of<StorageService>(context, listen: false)
+          ),
+          update: (context, storage, previous) => 
+            previous ?? TxListModel(storage),
+        ),
+
+        ChangeNotifierProxyProvider<StorageService, SettingsProvider>(
+          create: (context) => SettingsProvider(
+            Provider.of<StorageService>(context, listen: false)
+          ),
+          update: (context, storage, previous) => 
+            previous ?? SettingsProvider(storage),
+        ),
+
       ],
       child: const MyApp(),
     )
@@ -54,73 +85,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CategoryListModel()),
-        ChangeNotifierProvider(create: (_) => TxListModel()),
-        ChangeNotifierProvider(create: (_) => SettingsProvider()),
-      ],
-      child: Consumer<SettingsProvider>(
-        builder: (context, SettingsProvider, _) {
-          return MaterialApp(
-            locale: SettingsProvider.locale,
-            localizationsDelegates: const [
-              AppLocalizations.delegate, 
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate, 
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('zh'),
-              Locale('ja'),
-            ],
-            title: 'Money Manager',
-            home: Builder(
-              builder: (context) {
-                final l10n = AppLocalizations.of(context)!; 
-                return Scaffold(
-                  appBar: AppBar(
-                    // title: Text(l10n.appTitle), 
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.settings),
-                        onPressed: () {
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => const SettingsScreen())
-                          );
-                        }
-                      )
-                    ]
-                  ),
-
-                  body: _pages[_currentIndex],
-                  bottomNavigationBar: BottomNavigationBar(
-                    currentIndex: _currentIndex,
-                    items: <BottomNavigationBarItem> [
-                      BottomNavigationBarItem(
-                        icon: const Icon(Icons.pie_chart),
-                        label: l10n.categories, 
-                      ), 
-                      BottomNavigationBarItem(
-                        icon: const Icon(Icons.list),
-                        label: l10n.transactions
-                      )
-                    ],
-                    onTap: (int index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                  ),
-                );
-              }
-            
-            )
-          );
-        }
-      )
+    
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, _) {
+        return MaterialApp(
+          locale: settingsProvider.locale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate, 
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate, 
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'),
+            Locale('zh'),
+            Locale('ja'),
+          ],
+          title: 'Money Manager',
+          initialRoute: AppRoutes.home, 
+          onGenerateRoute: RouteGenerator.generateRoute,
+        );
+      }
     );
   }
 }

@@ -33,6 +33,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get delete => '删除';
 
   @override
+  String get edit => '编辑';
+
+  @override
   String get cancel => '取消';
 
   @override
@@ -81,6 +84,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addCategory => '添加分类';
 
   @override
+  String get editCategory => '编辑分类';
+
+  @override
   String get categoryName => '分类名称';
 
   @override
@@ -94,6 +100,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryNameRequired => '分类名称不能为空';
+
+  @override
+  String confirmDeleteCategory(Object name) {
+    return '确定要删除 $name 吗？';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return '与该类别关联的所有交易记录($count)将会被删除。';
+  }
 
   @override
   String get noTransactions => '暂无交易记录';

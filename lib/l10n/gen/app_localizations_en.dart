@@ -33,6 +33,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get edit => 'Edit';
+
+  @override
   String get cancel => 'Cancel';
 
   @override
@@ -81,6 +84,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addCategory => 'Add Category';
 
   @override
+  String get editCategory => 'Edit Category';
+
+  @override
   String get categoryName => 'Category Name';
 
   @override
@@ -94,6 +100,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Category name is required';
+
+  @override
+  String confirmDeleteCategory(Object name) {
+    return 'Are you sure you want to delete the \"$name\" category?';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return 'This will also delete all related transactions($count).';
+  }
 
   @override
   String get noTransactions => 'No transactions yet';
