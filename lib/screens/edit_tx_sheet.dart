@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/screens/select_category_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/utils/date_formatter.dart';
+import 'package:money_manager/utils/other_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
@@ -33,7 +34,7 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
     super.initState();
     _selectedCategory = widget.category;
     _isEditMode = widget.tx != null; 
-    _amount = widget.tx?.amount.toString() ?? '0';
+    _amount = widget.tx != null ? OtherUtils.formatAmount(widget.tx!.amount) : "0";
     _date = widget.tx?.occurredAt ?? DateTime.now();
     _notesController.text = widget.tx?.notes ?? '';
     _selectedCategory = widget.tx?.category ?? widget.category;
