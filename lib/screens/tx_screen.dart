@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/screens/edit_tx_sheet.dart';
+import 'package:money_manager/screens/manage_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/utils/currency_formatter.dart';
 import 'package:money_manager/utils/date_formatter.dart';
@@ -11,7 +12,7 @@ import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
 
 class TransactionScreen extends StatelessWidget {
-  const TransactionScreen({Key? key}) : super(key: key);
+  const TransactionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +139,11 @@ class TransactionScreen extends StatelessWidget {
       onTap: () {
         showModalBottomSheet(
           context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => EditTransactionSheet(
-            category: tx.category,
-            tx: tx,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
+          builder: (context) => ManageTransactionSheet(tx: tx),
         );
       },
       child: Container(

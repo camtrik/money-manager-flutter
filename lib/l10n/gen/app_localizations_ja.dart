@@ -99,19 +99,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preview => 'プレビュー';
 
   @override
-  String get categoryNameRequired => 'カテゴリー名は必須です';
-
-  @override
-  String confirmDeleteCategory(Object name) {
-    return '「$name」カテゴリを削除してもよろしいですか？';
-  }
-
-  @override
-  String deleteRelatedTransactions(Object count) {
-    return 'これにより関連する取引($count)も削除されます。';
-  }
-
-  @override
   String get noTransactions => '取引はまだありません';
 
   @override
@@ -149,4 +136,23 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get amountRequired => '金額は必須です';
+
+  @override
+  String get categoryNameRequired => 'カテゴリー名は必須です';
+
+  @override
+  String confirmDeleteCategory(Object name) {
+    return '「$name」カテゴリを削除してもよろしいですか？';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return 'これにより関連する取引($count)も削除されます。';
+  }
+
+  @override
+  String get confirmDeleteTransaction => 'この取引を削除してもよろしいですか？';
+
+  @override
+  String get deleteTransaction => 'この取引は削除されます。この操作は元に戻せません';
 }

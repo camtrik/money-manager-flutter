@@ -30,9 +30,7 @@
   "selectIcon": "选择图标",
   "selectColor": "选择颜色",
   "preview": "预览",  
-  "categoryNameRequired": "分类名称不能为空",
-  "confirmDeleteCategory": "确定要删除 {name} 吗？",
-  "deleteRelatedTransactions": "与该类别关联的所有交易记录({count})将会被删除。",
+  
 
   "noTransactions": "暂无交易记录",
   "expense": "支出",
@@ -47,5 +45,10 @@
   "startingBalance": "起始余额",
   "endingBalance": "结余",
   "bankCard": "银行卡", 
-  "amountRequired": "金额不能为空"
+  "amountRequired": "金额不能为空", 
+  "categoryNameRequired": "分类名称不能为空",
+  "confirmDeleteCategory": "确定要删除 {name} 吗？",
+  "deleteRelatedTransactions": "与该类别关联的所有交易记录({count})将会被删除。",
+  "confirmDeleteTransaction": "确定要删除该交易吗？",
+  "deleteTransaction": "交易将被删除,该操作无法撤销"
 }

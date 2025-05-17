@@ -99,19 +99,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preview => '预览';
 
   @override
-  String get categoryNameRequired => '分类名称不能为空';
-
-  @override
-  String confirmDeleteCategory(Object name) {
-    return '确定要删除 $name 吗？';
-  }
-
-  @override
-  String deleteRelatedTransactions(Object count) {
-    return '与该类别关联的所有交易记录($count)将会被删除。';
-  }
-
-  @override
   String get noTransactions => '暂无交易记录';
 
   @override
@@ -149,4 +136,23 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get amountRequired => '金额不能为空';
+
+  @override
+  String get categoryNameRequired => '分类名称不能为空';
+
+  @override
+  String confirmDeleteCategory(Object name) {
+    return '确定要删除 $name 吗？';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return '与该类别关联的所有交易记录($count)将会被删除。';
+  }
+
+  @override
+  String get confirmDeleteTransaction => '确定要删除该交易吗？';
+
+  @override
+  String get deleteTransaction => '交易将被删除,该操作无法撤销';
 }

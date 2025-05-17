@@ -99,19 +99,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preview => 'Preview';
 
   @override
-  String get categoryNameRequired => 'Category name is required';
-
-  @override
-  String confirmDeleteCategory(Object name) {
-    return 'Are you sure you want to delete the \"$name\" category?';
-  }
-
-  @override
-  String deleteRelatedTransactions(Object count) {
-    return 'This will also delete all related transactions($count).';
-  }
-
-  @override
   String get noTransactions => 'No transactions yet';
 
   @override
@@ -149,4 +136,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get amountRequired => 'Amount is required';
+
+  @override
+  String get categoryNameRequired => 'Category name is required';
+
+  @override
+  String confirmDeleteCategory(Object name) {
+    return 'Are you sure you want to delete the \"$name\" category?';
+  }
+
+  @override
+  String deleteRelatedTransactions(Object count) {
+    return 'This will also delete all related transactions($count).';
+  }
+
+  @override
+  String get confirmDeleteTransaction => 'Are you sure you want to delete this transaction?';
+
+  @override
+  String get deleteTransaction => 'This transaction will be deleted, this operation cannot be undone';
 }

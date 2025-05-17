@@ -21,7 +21,16 @@ class TxListModel extends ChangeNotifier {
     });
   }
 
-  Future<void> remove(int idx) async {
+  Future<void> remove(String txId) async {
+    int idx = _all.indexWhere((tx) => tx.id == txId);
+    if (idx != -1) {
+      await _storage.deleteTx(idx);
+      _all = _storage.getAllTx();
+      notifyListeners();
+    }
+  }
+
+  Future<void> removeByIdx(int idx) async {
     await _storage.deleteTx(idx);
     _all = _storage.getAllTx();
     notifyListeners();
