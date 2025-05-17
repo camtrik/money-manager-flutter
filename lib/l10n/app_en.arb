@@ -46,5 +46,7 @@
   "japanese": "Japanese",
   "startingBalance": "Starting Balance",
   "endingBalance": "Ending Balance",
-  "bankCard": "Bank Card"
+  "bankCard": "Bank Card",
+  
+  "amountRequired": "Amount is required"
 }

@@ -47,5 +47,6 @@
   "japanese": "日本語",
   "startingBalance": "開始残高",
   "endingBalance": "終了残高",
-  "bankCard": "銀行カード"
+  "bankCard": "銀行カード",
+  "amountRequired": "金額は必須です"
 }

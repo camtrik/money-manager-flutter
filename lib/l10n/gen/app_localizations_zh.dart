@@ -146,4 +146,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get bankCard => '银行卡';
+
+  @override
+  String get amountRequired => '金额不能为空';
 }

@@ -366,6 +366,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bank Card'**
   String get bankCard;
+
+  /// No description provided for @amountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount is required'**
+  String get amountRequired;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

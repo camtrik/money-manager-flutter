@@ -46,5 +46,6 @@
   "japanese": "日语",
   "startingBalance": "起始余额",
   "endingBalance": "结余",
-  "bankCard": "银行卡"
+  "bankCard": "银行卡", 
+  "amountRequired": "金额不能为空"
 }

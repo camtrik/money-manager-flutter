@@ -32,4 +32,13 @@ class TxListModel extends ChangeNotifier {
     _all = _storage.getAllTx();
     notifyListeners();
   }
+
+  Future<void> update(Transaction updatedTx) async {
+    int idx = _all.indexWhere((tx) => tx.id == updatedTx.id);
+    if (idx != -1) {
+      await _storage.updateTx(idx, updatedTx);
+      _all[idx] = updatedTx;
+      notifyListeners();
+    }
+  }
 }

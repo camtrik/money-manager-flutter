@@ -146,4 +146,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get bankCard => '銀行カード';
+
+  @override
+  String get amountRequired => '金額は必須です';
 }
