@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/routes/app_routes.dart';
-import 'package:money_manager/screens/add_tx_sheet.dart';
+import 'package:money_manager/screens/edit_tx_sheet.dart';
 import 'package:money_manager/screens/category_screen.dart';
 import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/home_screen.dart';
@@ -37,7 +37,7 @@ class RouteGenerator {
       case AppRoutes.addTransaction:
         if (args is Category) {
           return _buildModalBottomSheetRoute(
-            AddTransactionSheet(category: args),
+            EditTransactionSheet(category: args),
             isFullScreenDialog: true, 
           );
         }

@@ -39,6 +39,8 @@ class StorageService {
 
   Future<void> deleteTx(int idx) => txBox.deleteAt(idx);
 
+  Future<void> updateTx(int idx, Transaction tx) => txBox.putAt(idx, tx);
+
   Future<void> deleteTxByCategory(String categoryId) async {
     List<int> indicesToDelete = [];
 

@@ -277,24 +277,6 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get preview;
 
-  /// No description provided for @categoryNameRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Category name is required'**
-  String get categoryNameRequired;
-
-  /// No description provided for @confirmDeleteCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete the \"{name}\" category?'**
-  String confirmDeleteCategory(Object name);
-
-  /// No description provided for @deleteRelatedTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'This will also delete all related transactions({count}).'**
-  String deleteRelatedTransactions(Object count);
-
   /// No description provided for @noTransactions.
   ///
   /// In en, this message translates to:
@@ -366,6 +348,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bank Card'**
   String get bankCard;
+
+  /// No description provided for @amountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount is required'**
+  String get amountRequired;
+
+  /// No description provided for @categoryNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name is required'**
+  String get categoryNameRequired;
+
+  /// No description provided for @confirmDeleteCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the \"{name}\" category?'**
+  String confirmDeleteCategory(Object name);
+
+  /// No description provided for @deleteRelatedTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'This will also delete all related transactions({count}).'**
+  String deleteRelatedTransactions(Object count);
+
+  /// No description provided for @confirmDeleteTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this transaction?'**
+  String get confirmDeleteTransaction;
+
+  /// No description provided for @deleteTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'This transaction will be deleted, this operation cannot be undone'**
+  String get deleteTransaction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

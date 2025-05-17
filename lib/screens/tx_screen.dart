@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
-import 'package:money_manager/screens/add_tx_sheet.dart';
+import 'package:money_manager/screens/edit_tx_sheet.dart';
+import 'package:money_manager/screens/manage_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/utils/currency_formatter.dart';
 import 'package:money_manager/utils/date_formatter.dart';
@@ -11,7 +12,7 @@ import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
 
 class TransactionScreen extends StatelessWidget {
-  const TransactionScreen({Key? key}) : super(key: key);
+  const TransactionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class TransactionScreen extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
-            builder: (context) => AddTransactionSheet(
+            builder: (context) => EditTransactionSheet(
               category: defaultCategory,
             ),
           );
@@ -134,61 +135,71 @@ class TransactionScreen extends StatelessWidget {
   }
 
   Widget _buildTransactionItem(BuildContext context, Transaction tx, TxListModel txListModel) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          // Category icon
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Color(tx.category.colorValue),
-            child: Icon(
-              tx.category.icon,
-              color: Colors.white,
-              size: 22,
-            ),
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          const SizedBox(width: 16),
-          // Category name and notes
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  CategoryUtils.getLocalizedName(context, tx.category.id, tx.category.name),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                if (tx.notes.isNotEmpty)
+          builder: (context) => ManageTransactionSheet(tx: tx),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        
+        child: Row(
+          children: [
+            // Category icon
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Color(tx.category.colorValue),
+              child: Icon(
+                tx.category.icon,
+                color: Colors.white,
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Category name and notes
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    tx.notes,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                    CategoryUtils.getLocalizedName(context, tx.category.id, tx.category.name),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-              ],
+                  const SizedBox(height: 4),
+                  if (tx.notes.isNotEmpty)
+                    Text(
+                      tx.notes,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
             ),
-          ),
-          // Amount
-          Text(
-            CurrencyFormatter.format(tx.amount, currency: tx.currency),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.pink[300],
+            // Amount
+            Text(
+              CurrencyFormatter.format(tx.amount, currency: tx.currency),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.pink[300],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-
-  
-
 }

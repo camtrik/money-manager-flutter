@@ -21,7 +21,16 @@ class TxListModel extends ChangeNotifier {
     });
   }
 
-  Future<void> remove(int idx) async {
+  Future<void> remove(String txId) async {
+    int idx = _all.indexWhere((tx) => tx.id == txId);
+    if (idx != -1) {
+      await _storage.deleteTx(idx);
+      _all = _storage.getAllTx();
+      notifyListeners();
+    }
+  }
+
+  Future<void> removeByIdx(int idx) async {
     await _storage.deleteTx(idx);
     _all = _storage.getAllTx();
     notifyListeners();
@@ -31,5 +40,14 @@ class TxListModel extends ChangeNotifier {
     await _storage.deleteTxByCategory(categoryId);
     _all = _storage.getAllTx();
     notifyListeners();
+  }
+
+  Future<void> update(Transaction updatedTx) async {
+    int idx = _all.indexWhere((tx) => tx.id == updatedTx.id);
+    if (idx != -1) {
+      await _storage.updateTx(idx, updatedTx);
+      _all[idx] = updatedTx;
+      notifyListeners();
+    }
   }
 }

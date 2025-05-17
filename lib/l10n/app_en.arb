@@ -30,10 +30,7 @@
   "selectIcon": "Select Icon",
   "selectColor": "Select Color",
   "preview": "Preview",
-  "categoryNameRequired": "Category name is required",
-  "confirmDeleteCategory": "Are you sure you want to delete the \"{name}\" category?",
-  "deleteRelatedTransactions": "This will also delete all related transactions({count}).",
-
+  
   "noTransactions": "No transactions yet",
   "expense": "Expense",
   "totalExpense": "Total expense",
@@ -46,5 +43,13 @@
   "japanese": "Japanese",
   "startingBalance": "Starting Balance",
   "endingBalance": "Ending Balance",
-  "bankCard": "Bank Card"
+  "bankCard": "Bank Card",
+  
+  "amountRequired": "Amount is required",
+  "categoryNameRequired": "Category name is required",
+  "confirmDeleteCategory": "Are you sure you want to delete the \"{name}\" category?",
+  "deleteRelatedTransactions": "This will also delete all related transactions({count}).",
+  "confirmDeleteTransaction": "Are you sure you want to delete this transaction?",
+  "deleteTransaction": "This transaction will be deleted, this operation cannot be undone"
+
 }

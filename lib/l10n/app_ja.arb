@@ -31,9 +31,6 @@
   "selectIcon": "アイコンを選択",
   "selectColor": "色を選択",
   "preview": "プレビュー",
-  "categoryNameRequired": "カテゴリー名は必須です",
-  "confirmDeleteCategory": "「{name}」カテゴリを削除してもよろしいですか？",
-  "deleteRelatedTransactions": "これにより関連する取引({count})も削除されます。",
 
   "noTransactions": "取引はまだありません",
   "expense": "支出",
@@ -47,5 +44,11 @@
   "japanese": "日本語",
   "startingBalance": "開始残高",
   "endingBalance": "終了残高",
-  "bankCard": "銀行カード"
+  "bankCard": "銀行カード",
+  "amountRequired": "金額は必須です", 
+  "categoryNameRequired": "カテゴリー名は必須です",
+  "confirmDeleteCategory": "「{name}」カテゴリを削除してもよろしいですか？",
+  "deleteRelatedTransactions": "これにより関連する取引({count})も削除されます。",
+  "confirmDeleteTransaction": "この取引を削除してもよろしいですか？",
+  "deleteTransaction": "この取引は削除されます。この操作は元に戻せません"
 }

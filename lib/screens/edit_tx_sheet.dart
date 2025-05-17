@@ -3,32 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/screens/select_category_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/utils/date_formatter.dart';
+import 'package:money_manager/utils/other_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 
-class AddTransactionSheet extends StatefulWidget {
+class EditTransactionSheet extends StatefulWidget {
   final Category category;
+  final Transaction? tx; 
 
-  const AddTransactionSheet({super.key, required this.category});
+  const EditTransactionSheet({super.key, required this.category, this.tx});
 
   @override
-  State<AddTransactionSheet> createState() => _AddTransactionSheetState();
+  State<EditTransactionSheet> createState() => _EditTransactionSheetState();
 }
 
-class _AddTransactionSheetState extends State<AddTransactionSheet> {
-  String _amount = '0';
-  String _currency = 'CNY';
-  DateTime _date = DateTime.now();
+class _EditTransactionSheetState extends State<EditTransactionSheet> {
+  late String _amount;
+  late DateTime _date;
   final TextEditingController _notesController = TextEditingController();
   late Category _selectedCategory;
+  bool _isEditMode = false;
+  String? _errorMessage;
+  String _currency = 'CNY'; // TODO: implement other currencies 
   
   @override
   void initState() {
     super.initState();
     _selectedCategory = widget.category;
+    _isEditMode = widget.tx != null; 
+    _amount = widget.tx != null ? OtherUtils.formatAmount(widget.tx!.amount) : "0";
+    _date = widget.tx?.occurredAt ?? DateTime.now();
+    _notesController.text = widget.tx?.notes ?? '';
+    _selectedCategory = widget.tx?.category ?? widget.category;
   }
 
   void _onNumberPressed(String value) {
@@ -68,15 +77,31 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
   void _saveTransaction() {
     final amount = double.tryParse(_amount) ?? 0.0;
     if (amount > 0) {
-      final transaction = Transaction(
-        amount: amount,
-        currency: _currency,
-        category: _selectedCategory,
-        notes: _notesController.text.trim(), 
-        occurredAt: _date,
-      );
-      context.read<TxListModel>().add(transaction);
+      if (_isEditMode) {
+        final updatedTransaction = Transaction(
+          id: widget.tx!.id,
+          amount: amount,
+          currency: _currency,
+          category: _selectedCategory,
+          notes: _notesController.text.trim(), 
+          occurredAt: _date,
+        );
+        context.read<TxListModel>().update(updatedTransaction);
+      } else {
+        final transaction = Transaction(
+          amount: amount,
+          currency: _currency,
+          category: _selectedCategory,
+          notes: _notesController.text.trim(), 
+          occurredAt: _date,
+        );
+        context.read<TxListModel>().add(transaction);
+      }
       Navigator.pop(context);
+    } else {
+      setState(() {
+        _errorMessage = AppLocalizations.of(context)!.amountRequired;
+      });
     }
   }
 
@@ -285,6 +310,13 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
               ),
             ),
           ),
+
+          if (_errorMessage != null) ...[
+            Text(
+              _errorMessage!,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ],
 
           // Date display at bottom
           Padding(
