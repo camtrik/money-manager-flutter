@@ -24,6 +24,7 @@
   "categoryHousing": "住宅",
   "categoryCommunication": "通信",
   "categoryDaily": "日用品",
+  "categoryClothing": "服",
   "categoryOther": "その他",
   "addCategory": "カテゴリーを追加",
   "editCategory": "カテゴリーを編集",

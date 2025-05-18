@@ -7,6 +7,8 @@ import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/utils/currency_formatter.dart';
 import 'package:money_manager/utils/date_formatter.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
+import 'package:money_manager/view_models/date_range_model.dart';
+import 'package:money_manager/widgets/date_range_selector.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
@@ -18,14 +20,17 @@ class TransactionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final txListModel = context.watch<TxListModel>();
-    final List<Transaction> allTransactions = txListModel.all;
+    final dateRange = context.watch<DateRangeModel>(); // 获取日期范围
+    
+    // 使用日期范围过滤交易记录
+    final List<Transaction> filteredTransactions = txListModel.getFilteredByDateRange(dateRange);
     final defaultCategory = context.read<CategoryListModel>().getById("other")!;
 
     // Group transactions by date
     final Map<String, List<Transaction>> groupedTransactions = {};
     final Map<String, double> dailyTotals = {};
 
-    for (var tx in allTransactions) {
+    for (var tx in filteredTransactions) {
       final dateKey = DateFormatter.formatDateKey(tx.occurredAt);
       if (!groupedTransactions.containsKey(dateKey)) {
         groupedTransactions[dateKey] = [];
@@ -40,28 +45,43 @@ class TransactionScreen extends StatelessWidget {
       ..sort((a, b) => DateFormatter.parseDateKey(b).compareTo(DateFormatter.parseDateKey(a)));
 
     return Scaffold(
-      body: allTransactions.isEmpty
-          ? Center(child: Text(l10n.noTransactions))
-          : ListView.builder(
-              itemCount: sortedDates.length,
-              itemBuilder: (context, index) {
-                final dateKey = sortedDates[index];
-                final transactions = groupedTransactions[dateKey]!;
-                final total = dailyTotals[dateKey] ?? 0.0;
-                
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Date header with total
-                    _buildDateHeader(context, dateKey, total),
-                    // Transactions for this date
-                    ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
-                    // Add a divider between date groups
-                    const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-                  ],
-                );
-              },
+      body: Column(
+        children: [
+          // data range selector 
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Center(
+              child: DateRangeSelector(),
             ),
+          ),
+          
+          // transaction list 
+          Expanded(
+            child: filteredTransactions.isEmpty
+                ? Center(child: Text(l10n.noTransactions))
+                : ListView.builder(
+                    itemCount: sortedDates.length,
+                    itemBuilder: (context, index) {
+                      final dateKey = sortedDates[index];
+                      final transactions = groupedTransactions[dateKey]!;
+                      final total = dailyTotals[dateKey] ?? 0.0;
+                      
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Date header with total
+                          _buildDateHeader(context, dateKey, total),
+                          // Transactions for this date
+                          ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
+                          // Add a divider between date groups
+                          const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
+                        ],
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(

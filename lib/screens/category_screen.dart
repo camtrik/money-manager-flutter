@@ -6,6 +6,8 @@ import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/routes/app_routes.dart';
 import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/edit_tx_sheet.dart';
+import 'package:money_manager/view_models/date_range_model.dart';
+import 'package:money_manager/widgets/date_range_selector.dart';
 
 import 'package:money_manager/screens/manage_category_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
@@ -19,7 +21,11 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final List<Transaction> txs = context.watch<TxListModel>().all;
+    final txListModel = context.watch<TxListModel>();
+    final dateRange = context.watch<DateRangeModel>(); // 获取日期范围
+    
+    // 使用日期范围过滤交易记录
+    final List<Transaction> txs = txListModel.getFilteredByDateRange(dateRange);
     final Map<String, double> sums = {};
     final List<Category> categories = context.watch<CategoryListModel>().all;
 
@@ -135,6 +141,14 @@ class CategoryScreen extends StatelessWidget {
       // Wrap main content with Expanded, allowing it to stretch within available space
       child: Column(
         children: [
+          // data range selector 
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Center(
+              child: DateRangeSelector(),
+            ),
+          ),
+          
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -346,4 +360,21 @@ class CategoryScreen extends StatelessWidget {
 // Helper function
 int min(int a, int b) {
   return a < b ? a : b;
+}
+
+extension ColorExtension on Color {
+  // Set all components of color (red, green, blue, alpha) at once
+  Color withValues({int? red, int? green, int? blue, double? alpha}) {
+    return Color.fromARGB(
+      (alpha != null) ? (alpha * 255).round() : this.alpha,
+      red ?? this.red,
+      green ?? this.green,
+      blue ?? this.blue,
+    );
+  }
+  
+  // Helper function that returns an integer value for Hive
+  int toARGB32() {
+    return value;
+  }
 }

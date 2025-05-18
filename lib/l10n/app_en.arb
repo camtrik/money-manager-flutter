@@ -23,6 +23,7 @@
   "categoryHousing": "Housing",
   "categoryCommunication": "Communication",
   "categoryDaily": "Daily",
+  "categoryClothing": "Clothes", 
   "categoryOther": "Other",
   "addCategory": "Add Category",
   "editCategory": "Edit Category",

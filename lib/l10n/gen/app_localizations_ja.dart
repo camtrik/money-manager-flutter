@@ -78,6 +78,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryDaily => '日用品';
 
   @override
+  String get categoryClothing => '服';
+
+  @override
   String get categoryOther => 'その他';
 
   @override

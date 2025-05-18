@@ -78,6 +78,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryDaily => '日用';
 
   @override
+  String get categoryClothing => '服装';
+
+  @override
   String get categoryOther => '其他';
 
   @override

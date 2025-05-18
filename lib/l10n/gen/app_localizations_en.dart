@@ -78,6 +78,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryDaily => 'Daily';
 
   @override
+  String get categoryClothing => 'Clothes';
+
+  @override
   String get categoryOther => 'Other';
 
   @override

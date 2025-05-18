@@ -23,6 +23,7 @@
   "categoryHousing": "住房",
   "categoryCommunication": "通讯",
   "categoryDaily": "日用",
+  "categoryClothing": "服装", 
   "categoryOther": "其他",
   "addCategory": "添加分类",
   "editCategory": "编辑分类",

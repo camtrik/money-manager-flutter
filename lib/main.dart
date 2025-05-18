@@ -7,6 +7,7 @@ import 'package:money_manager/routes/route_generator.dart';
 import 'package:money_manager/screens/settings_screen.dart';
 import 'package:money_manager/screens/tx_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
+import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/view_models/settings_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/services/storage_service.dart';
@@ -36,6 +37,8 @@ void main() async {
         Provider<StorageService>.value(value: storageService), 
 
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        
+        ChangeNotifierProvider(create: (_) => DateRangeModel()),
 
         ChangeNotifierProxyProvider<StorageService, CategoryListModel>(
           create: (context) => CategoryListModel(

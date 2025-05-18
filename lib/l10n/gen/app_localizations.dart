@@ -235,6 +235,12 @@ abstract class AppLocalizations {
   /// **'Daily'**
   String get categoryDaily;
 
+  /// No description provided for @categoryClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothes'**
+  String get categoryClothing;
+
   /// No description provided for @categoryOther.
   ///
   /// In en, this message translates to:
