@@ -58,5 +58,12 @@
   "viewByWeek": "View by Week",
   "viewByMonth": "View by Month",
   "viewByYear": "View by Year",
-  "customDateRange": "Custom Date Range"
+  "customDateRange": "Custom Date Range",
+  
+  "periodTitle": "Period",
+  "selectRange": "Select Range",
+  "allTime": "All Time",
+  "week": "Week",
+  "year": "Year",
+  "month": "Month"
 }

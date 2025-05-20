@@ -58,5 +58,12 @@
   "viewByWeek": "週別表示",
   "viewByMonth": "月別表示",
   "viewByYear": "年別表示",
-  "customDateRange": "カスタム期間"
+  "customDateRange": "カスタム期間",
+  
+  "periodTitle": "期間",
+  "selectRange": "範囲を選択",
+  "allTime": "全期間",
+  "week": "週",
+  "year": "年",
+  "month": "月"
 }

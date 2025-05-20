@@ -176,4 +176,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customDateRange => 'Custom Date Range';
+
+  @override
+  String get periodTitle => 'Period';
+
+  @override
+  String get selectRange => 'Select Range';
+
+  @override
+  String get allTime => 'All Time';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get month => 'Month';
 }

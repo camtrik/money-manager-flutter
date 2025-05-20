@@ -176,4 +176,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get customDateRange => '自定义范围';
+
+  @override
+  String get periodTitle => '周期';
+
+  @override
+  String get selectRange => '选择范围';
+
+  @override
+  String get allTime => '所有时间';
+
+  @override
+  String get week => '周';
+
+  @override
+  String get year => '年';
+
+  @override
+  String get month => '月';
 }

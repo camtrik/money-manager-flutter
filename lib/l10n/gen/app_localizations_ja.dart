@@ -176,4 +176,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get customDateRange => 'カスタム期間';
+
+  @override
+  String get periodTitle => '期間';
+
+  @override
+  String get selectRange => '範囲を選択';
+
+  @override
+  String get allTime => '全期間';
+
+  @override
+  String get week => '週';
+
+  @override
+  String get year => '年';
+
+  @override
+  String get month => '月';
 }

@@ -426,6 +426,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom Date Range'**
   String get customDateRange;
+
+  /// No description provided for @periodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get periodTitle;
+
+  /// No description provided for @selectRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Range'**
+  String get selectRange;
+
+  /// No description provided for @allTime.
+  ///
+  /// In en, this message translates to:
+  /// **'All Time'**
+  String get allTime;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

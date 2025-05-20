@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
+import 'package:money_manager/widgets/date_range_selector_sheet.dart';
 import 'package:provider/provider.dart';
 
 class DateRangeSelector extends StatelessWidget {
@@ -98,7 +99,7 @@ class DateRangeSelector extends StatelessWidget {
           ),
           // 日期选择器
           GestureDetector(
-            onTap: () => _selectDateRange(context, dateRange),
+            onTap: () => _showDateRangeSelectorSheet(context),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -134,161 +135,13 @@ class DateRangeSelector extends StatelessWidget {
     );
   }
 
-  // 选择日期范围
-  Future<void> _selectDateRange(BuildContext context, DateRangeModel dateRange) async {
-    final l10n = AppLocalizations.of(context)!;
-    final items = <PopupMenuEntry<dynamic>>[];
-    
-    // 选择特定日期选项
-    items.add(
-      PopupMenuItem<String>(
-        value: 'select_specific_date',
-        child: Text(l10n.selectSpecificDate),
-      ),
-    );
-    
-    // 添加分隔线
-    items.add(const PopupMenuDivider());
-    
-    // 原有的选项
-    items.add(
-      PopupMenuItem<DateRangeType>(
-        value: DateRangeType.day,
-        child: Text(l10n.viewByDay),
-      ),
-    );
-    
-    items.add(
-      PopupMenuItem<DateRangeType>(
-        value: DateRangeType.week,
-        child: Text(l10n.viewByWeek),
-      ),
-    );
-    
-    items.add(
-      PopupMenuItem<DateRangeType>(
-        value: DateRangeType.month,
-        child: Text(l10n.viewByMonth),
-      ),
-    );
-    
-    items.add(
-      PopupMenuItem<DateRangeType>(
-        value: DateRangeType.year,
-        child: Text(l10n.viewByYear),
-      ),
-    );
-    
-    items.add(
-      PopupMenuItem<DateRangeType>(
-        value: DateRangeType.custom,
-        child: Text(l10n.customDateRange),
-      ),
-    );
-    
-    // 显示弹出菜单
-    final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
-    final RelativeRect position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(Offset.zero, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-    
-    final dynamic result = await showMenu<dynamic>(
+  // 显示日期范围选择器底部弹出sheet
+  void _showDateRangeSelectorSheet(BuildContext context) {
+    showModalBottomSheet(
       context: context,
-      position: position,
-      items: items,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const DateRangeSelectorSheet(),
     );
-    
-    if (result != null) {
-      if (result == 'select_specific_date') {
-        // 处理选择特定日期
-        _selectSpecificDate(context, dateRange);
-      } else if (result is DateRangeType) {
-        // 处理现有的日期范围类型
-        switch (result) {
-          case DateRangeType.day:
-            dateRange.setToday();
-            break;
-          case DateRangeType.week:
-            dateRange.setCurrentWeek();
-            break;
-          case DateRangeType.month:
-            dateRange.setCurrentMonth();
-            break;
-          case DateRangeType.year:
-            dateRange.setCurrentYear();
-            break;
-          case DateRangeType.custom:
-            _selectCustomDateRange(context, dateRange);
-            break;
-        }
-      }
-    }
-  }
-  
-  // 选择特定日期
-  Future<void> _selectSpecificDate(BuildContext context, DateRangeModel dateRange) async {
-    final DateTime initialDate = dateRange.startDate;
-    final DateTime firstDate = DateTime(2000);
-    final DateTime lastDate = DateTime(2100);
-    
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Colors.red.shade400,
-              onPrimary: Colors.white,
-              surface: Colors.pink.shade50,
-              onSurface: Colors.black,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    
-    if (picked != null) {
-      dateRange.setDay(picked);
-    }
-  }
-  
-  Future<void> _selectCustomDateRange(BuildContext context, DateRangeModel dateRange) async {
-    final initialDateRange = DateTimeRange(
-      start: dateRange.startDate,
-      end: dateRange.endDate,
-    );
-    
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      initialDateRange: initialDateRange,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Colors.red.shade400,
-              onPrimary: Colors.white,
-              surface: Colors.pink.shade50,
-              onSurface: Colors.black,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    
-    if (picked != null) {
-      dateRange.setDateRange(picked.start, picked.end);
-    }
   }
 } 
