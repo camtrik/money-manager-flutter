@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
+import 'package:money_manager/utils/date_formatter.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/widgets/date_range_selector_sheet.dart';
 import 'package:provider/provider.dart';
@@ -16,43 +17,49 @@ class DateRangeSelector extends StatelessWidget {
     String displayText;
     Widget? dayIndicator;
     
-    // navigation button callbacks 
+    // Navigation button callbacks 
     VoidCallback previousCallback;
     VoidCallback nextCallback;
     
     switch (dateRange.currentRangeType) {
       case DateRangeType.day:
-        final DateFormat dayFormatter = DateFormat.yMd(Localizations.localeOf(context).languageCode);
-        displayText = dayFormatter.format(dateRange.startDate);
+        displayText = DateFormatter.formatDate(context, dateRange.startDate);
         previousCallback = dateRange.previousDay;
         nextCallback = dateRange.nextDay;
         break;
         
       case DateRangeType.week:
-        final DateFormat dateFormatter = DateFormat.MMMd(Localizations.localeOf(context).languageCode);
-        displayText = '${dateFormatter.format(dateRange.startDate)} - ${dateFormatter.format(dateRange.endDate)}';
+        final startStr = DateFormatter.formatDateShort(context, dateRange.startDate);
+        final endStr = DateFormatter.formatDateShort(context, dateRange.endDate);
+        displayText = '$startStr - $endStr';
         previousCallback = dateRange.previousWeek;
         nextCallback = dateRange.nextWeek;
         break;
         
       case DateRangeType.year:
-        final DateFormat yearFormatter = DateFormat.y(Localizations.localeOf(context).languageCode);
-        displayText = yearFormatter.format(dateRange.startDate);
+        displayText = DateFormatter.formatYear(context, dateRange.startDate);
         previousCallback = dateRange.previousYear;
         nextCallback = dateRange.nextYear;
         break;
         
       case DateRangeType.custom:
-        final DateFormat dateFormatter = DateFormat.yMd(Localizations.localeOf(context).languageCode);
-        displayText = '${dateFormatter.format(dateRange.startDate)} - ${dateFormatter.format(dateRange.endDate)}';
+        final startStr = DateFormatter.formatDateShort(context, dateRange.startDate);
+        final endStr = DateFormatter.formatDateShort(context, dateRange.endDate);
+        displayText = '$startStr - $endStr';
         previousCallback = dateRange.previousRange;
         nextCallback = dateRange.nextRange;
+        break;
+
+      case DateRangeType.allTime:
+        displayText = l10n.allTime;
+        // Disable navigation for all time view
+        previousCallback = () {};
+        nextCallback = () {};
         break;
         
       case DateRangeType.month:
       default:
-        final DateFormat monthFormatter = DateFormat.yMMMM(Localizations.localeOf(context).languageCode);
-        displayText = monthFormatter.format(dateRange.startDate);
+        displayText = DateFormatter.formatMonthYear(context, dateRange.startDate);
         
         final int daysInMonth = DateTime(
           dateRange.startDate.year,
@@ -92,23 +99,23 @@ class DateRangeSelector extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 左箭头
+          // Left arrow
           IconButton(
             icon: Icon(Icons.chevron_left, color: Colors.red.shade400),
             onPressed: previousCallback,
           ),
-          // 日期选择器
+          // Date selector
           GestureDetector(
             onTap: () => _showDateRangeSelectorSheet(context),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // 天数指示器（仅在月视图中显示）
+                // Day indicator (only shown in month view)
                 if (dayIndicator != null) ...[
                   dayIndicator,
                   const SizedBox(width: 8),
                 ],
-                // 显示日期文本
+                // Display date text
                 Text(
                   displayText,
                   style: const TextStyle(
@@ -125,7 +132,7 @@ class DateRangeSelector extends StatelessWidget {
               ],
             ),
           ),
-          // 右箭头
+          // Right arrow
           IconButton(
             icon: Icon(Icons.chevron_right, color: Colors.red.shade400),
             onPressed: nextCallback,
@@ -135,7 +142,6 @@ class DateRangeSelector extends StatelessWidget {
     );
   }
 
-  // 显示日期范围选择器底部弹出sheet
   void _showDateRangeSelectorSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,

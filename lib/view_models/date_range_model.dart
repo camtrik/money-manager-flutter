@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
-// range type enum
+/// Range type enum
 enum DateRangeType {
   custom,
   day,
   week,
   month,
-  year
+  year,
+  allTime
 }
 
 class DateRangeModel extends ChangeNotifier {
-  // data range now 
+  // Date range boundaries
   DateTime _startDate;
   DateTime _endDate;
   
-  // current range type
+  // Current range type
   DateRangeType _currentRangeType = DateRangeType.month;
   
-  // default as current month
+  // Default constructor - sets current month as default
   DateRangeModel() 
     : _startDate = DateTime(DateTime.now().year, DateTime.now().month, 1),
       _endDate = DateTime(
@@ -32,14 +33,14 @@ class DateRangeModel extends ChangeNotifier {
   DateTime get endDate => _endDate;
   DateRangeType get currentRangeType => _currentRangeType;
   
-  // check if a date is in the current range
+  // Check if a date is in the current range
   bool isInRange(DateTime date) {
     return date.isAtSameMomentAs(_startDate) || 
            date.isAtSameMomentAs(_endDate) || 
            (date.isAfter(_startDate) && date.isBefore(_endDate));
   }
   
-  // set custom range 
+  // Set custom range 
   void setDateRange(DateTime start, DateTime end) {
     _startDate = DateTime(start.year, start.month, start.day, 0, 0, 0);
     _endDate = DateTime(end.year, end.month, end.day, 23, 59, 59);
@@ -47,7 +48,15 @@ class DateRangeModel extends ChangeNotifier {
     notifyListeners();
   }
   
-  // set previous range 
+  // Set all time range
+  void setAllTime() {
+    _startDate = DateTime(2000, 1, 1);
+    _endDate = DateTime.now().add(const Duration(days: 365));
+    _currentRangeType = DateRangeType.allTime;
+    notifyListeners();
+  }
+  
+  // Navigate to previous range period
   void previousRange() {
     final duration = _endDate.difference(_startDate);
     final newEnd = _startDate.subtract(const Duration(seconds: 1));
@@ -56,7 +65,7 @@ class DateRangeModel extends ChangeNotifier {
     setDateRange(newStart, newEnd);
   }
   
-  // set next range 
+  // Navigate to next range period
   void nextRange() {
     final duration = _endDate.difference(_startDate);
     final newStart = _endDate.add(const Duration(seconds: 1));
@@ -65,13 +74,13 @@ class DateRangeModel extends ChangeNotifier {
     setDateRange(newStart, newEnd);
   }
 
-  // set current month as default 
+  // Set current month as default 
   void setCurrentMonth() {
     final now = DateTime.now();
     _setMonth(now.year, now.month);
   }
   
-  // set to specific month (private implementation)
+  // Set to specific month (private implementation)
   void _setMonth(int year, int month) {
     _startDate = DateTime(year, month, 1);
     _endDate = DateTime(year, month + 1, 0, 23, 59, 59);
@@ -79,26 +88,26 @@ class DateRangeModel extends ChangeNotifier {
     notifyListeners();
   }
   
-  // set month 
+  // Set to a specific month
   void setMonth(int year, int month) {
     _setMonth(year, month);
   }
   
-  // move to previous month 
+  // Navigate to previous month
   void previousMonth() {
     final year = _startDate.month == 1 ? _startDate.year - 1 : _startDate.year;
     final month = _startDate.month == 1 ? 12 : _startDate.month - 1;
     _setMonth(year, month);
   }
   
-  // move to next month 
+  // Navigate to next month
   void nextMonth() {
     final year = _startDate.month == 12 ? _startDate.year + 1 : _startDate.year;
     final month = _startDate.month == 12 ? 1 : _startDate.month + 1;
     _setMonth(year, month);
   }
   
-  // set year 
+  // Set specific year
   void setYear(int year) {
     _startDate = DateTime(year, 1, 1);
     _endDate = DateTime(year, 12, 31, 23, 59, 59);
@@ -106,22 +115,22 @@ class DateRangeModel extends ChangeNotifier {
     notifyListeners();
   }
   
-  // set current year 
+  // Set current year
   void setCurrentYear() {
     setYear(DateTime.now().year);
   }
   
-  // set previous year 
+  // Navigate to previous year
   void previousYear() {
     setYear(_startDate.year - 1);
   }
   
-  // set next year 
+  // Navigate to next year
   void nextYear() {
     setYear(_startDate.year + 1);
   }
   
-  // set day 
+  // Set specific day
   void setDay(DateTime day) {
     _startDate = DateTime(day.year, day.month, day.day, 0, 0, 0);
     _endDate = DateTime(day.year, day.month, day.day, 23, 59, 59);
@@ -129,47 +138,48 @@ class DateRangeModel extends ChangeNotifier {
     notifyListeners();
   }
   
-  // set today 
+  // Set today
   void setToday() {
     setDay(DateTime.now());
   }
   
-  // set previous day 
+  // Navigate to previous day
   void previousDay() {
     setDay(_startDate.subtract(const Duration(days: 1)));
   }
   
-  // set next day 
+  // Navigate to next day
   void nextDay() {
     setDay(_startDate.add(const Duration(days: 1)));
   }
   
-  // set week 
+  // Set specific week
   void setWeek(DateTime date) {
-    // find the first day of the week (Monday)
+    // Find the first day of the week (Monday)
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    // set from Monday to Sunday
+    // Set from Monday to Sunday
     _startDate = DateTime(firstDayOfWeek.year, firstDayOfWeek.month, firstDayOfWeek.day, 0, 0, 0);
     _endDate = _startDate.add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
     _currentRangeType = DateRangeType.week;
     notifyListeners();
   }
   
-  // set current week 
+  // Set current week
   void setCurrentWeek() {
     setWeek(DateTime.now());
   }
   
-  // set previous week 
+  // Navigate to previous week
   void previousWeek() {
     setWeek(_startDate.subtract(const Duration(days: 7)));
   }
   
-  // set next week 
+  // Navigate to next week
   void nextWeek() {
     setWeek(_startDate.add(const Duration(days: 7)));
   }
-  
+
+  // Deprecated - will be removed in future versions
   String formatDisplayText(BuildContext context) {
     switch (_currentRangeType) {
       case DateRangeType.day:
@@ -180,6 +190,8 @@ class DateRangeModel extends ChangeNotifier {
         return '${_startDate.year}年${_startDate.month}月';
       case DateRangeType.year:
         return '${_startDate.year}年';
+      case DateRangeType.allTime:
+        return 'All Time';
       case DateRangeType.custom:
       default:
         return '${_startDate.year}/${_startDate.month}/${_startDate.day} - ${_endDate.year}/${_endDate.month}/${_endDate.day}';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
+import 'package:money_manager/utils/date_formatter.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,10 @@ class DateRangeSelectorSheet extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     
+    // Calculate grid width with padding and margins
+    final screenWidth = MediaQuery.of(context).size.width;
+    final gridWidth = (screenWidth - 32) / 2; // 16px padding on each side
+    
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: const BoxDecoration(
@@ -21,105 +26,112 @@ class DateRangeSelectorSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 标题
+          // Title
           Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 12),
             child: Text(
               l10n.periodTitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           
-          Container(
-            margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              children: [
-                Icon(Icons.date_range, size: 30),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.selectRange,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  _getDisplayText(dateRange),
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-              ],
+          // Current date range display (clickable to open date range picker)
+          GestureDetector(
+            onTap: () => _selectCustomDateRange(context, dateRange),
+            child: Container(
+              width: screenWidth - 32, // Same width as two grid items
+              margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.date_range, size: 30),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.selectRange,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    _getDisplayText(context, dateRange),
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
             ),
           ),
           
-          // 选项网格
+          // Grid options
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             childAspectRatio: 1.5,
+            crossAxisSpacing: 4, // Even smaller gap between grid items
+            mainAxisSpacing: 4, // Even smaller gap between grid items
             padding: const EdgeInsets.symmetric(horizontal: 16),
             children: [
-              // 所有时间
+              // All time option
               _buildGridItem(
                 context, 
                 Icons.all_inclusive, 
                 l10n.allTime, 
                 "", 
                 () => _selectAllTime(context, dateRange),
-                false,
+                dateRange.currentRangeType == DateRangeType.allTime,
               ),
               
-              // 选择日期
+              // Select specific date option
               _buildGridItem(
-                context, 
-                Icons.calendar_today, 
-                l10n.selectSpecificDate, 
-                "", 
+                context,
+                Icons.calendar_today,
+                l10n.selectSpecificDate,
+                "",
                 () => _selectSpecificDate(context, dateRange),
                 false,
               ),
               
-              // 周
+              // Week option
               _buildGridItem(
                 context, 
                 Icons.view_week, 
                 l10n.week, 
-                "${_getWeekRangeText(now)}", 
+                DateFormatter.formatDateShort(context, now), 
                 () => _selectWeek(context, dateRange),
                 dateRange.currentRangeType == DateRangeType.week,
               ),
               
-              // 今天
+              // Today option
               _buildGridItem(
                 context, 
                 Icons.today, 
                 l10n.today, 
-                "${now.month}月${now.day}日", 
+                DateFormatter.formatDateShort(context, now), 
                 () => _selectToday(context, dateRange),
                 dateRange.currentRangeType == DateRangeType.day,
               ),
               
-              // 年
+              // Year option
               _buildGridItem(
                 context, 
                 Icons.calendar_view_month, 
                 l10n.year, 
-                "${now.year} 年", 
+                DateFormatter.formatYear(context, now), 
                 () => _selectYear(context, dateRange),
                 dateRange.currentRangeType == DateRangeType.year,
               ),
               
-              // 月
+              // Month option
               _buildGridItem(
                 context, 
                 Icons.calendar_month, 
                 l10n.month, 
-                "${now.year}年 ${now.month}月", 
+                DateFormatter.formatMonthYear(context, now), 
                 () => _selectMonth(context, dateRange),
                 dateRange.currentRangeType == DateRangeType.month,
               ),
@@ -130,33 +142,28 @@ class DateRangeSelectorSheet extends StatelessWidget {
     );
   }
   
-  // 获取当前选择的时间范围的显示文本
-  String _getDisplayText(DateRangeModel dateRange) {
+  // Get display text for the current date range using DateFormatter
+  String _getDisplayText(BuildContext context, DateRangeModel dateRange) {
     final startDate = dateRange.startDate;
     final endDate = dateRange.endDate;
     
     switch (dateRange.currentRangeType) {
       case DateRangeType.day:
-        return "${startDate.year}年${startDate.month}月${startDate.day}日";
+        return DateFormatter.formatDate(context, startDate);
       case DateRangeType.week:
-        return _getWeekRangeText(startDate);
+        return "${DateFormatter.formatDateShort(context, startDate)} - ${DateFormatter.formatDateShort(context, endDate)}";
       case DateRangeType.month:
-        return "${startDate.year}年${startDate.month}月";
+        return DateFormatter.formatMonthYear(context, startDate);
       case DateRangeType.year:
-        return "${startDate.year}年";
+        return DateFormatter.formatYear(context, startDate);
+      case DateRangeType.allTime:
+        return AppLocalizations.of(context)!.allTime;
       case DateRangeType.custom:
-        return "${startDate.year}/${startDate.month}/${startDate.day} - ${endDate.year}/${endDate.month}/${endDate.day}";
+        return "${DateFormatter.formatDate(context, startDate)} - ${DateFormatter.formatDate(context, endDate)}";
     }
   }
   
-  // 获取周范围的显示文本
-  String _getWeekRangeText(DateTime date) {
-    final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
-    return "${firstDayOfWeek.month}月${firstDayOfWeek.day}日 - ${lastDayOfWeek.month}月${lastDayOfWeek.day}日";
-  }
-  
-  // 构建网格项
+  // Build a grid item
   Widget _buildGridItem(BuildContext context, IconData icon, String title, String subtitle, VoidCallback onTap, bool isSelected) {
     return GestureDetector(
       onTap: () {
@@ -164,7 +171,7 @@ class DateRangeSelectorSheet extends StatelessWidget {
         Navigator.of(context).pop();
       },
       child: Container(
-        margin: const EdgeInsets.all(6),
+        margin: const EdgeInsets.all(2), // Even smaller margins
         decoration: BoxDecoration(
           color: isSelected ? Colors.blue.shade100 : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(12),
@@ -208,16 +215,29 @@ class DateRangeSelectorSheet extends StatelessWidget {
     );
   }
   
-  // 选择所有时间
+  // Select all time range
   void _selectAllTime(BuildContext context, DateRangeModel dateRange) {
-    // 这里可以设置为一个很大的范围，比如从2000年到现在
-    final start = DateTime(2000, 1, 1);
-    final end = DateTime.now().add(const Duration(days: 365)); // 未来一年
-    dateRange.setDateRange(start, end);
+    dateRange.setAllTime();
   }
   
-  // 选择特定日期
+  // Select specific date (opens date picker for a single day)
   Future<void> _selectSpecificDate(BuildContext context, DateRangeModel dateRange) async {
+    final now = DateTime.now();
+    
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    
+    if (picked != null) {
+      dateRange.setDay(picked);
+    }
+  }
+  
+  // Select custom date range
+  Future<void> _selectCustomDateRange(BuildContext context, DateRangeModel dateRange) async {
     final initialDateRange = DateTimeRange(
       start: dateRange.startDate,
       end: dateRange.endDate,
@@ -245,25 +265,28 @@ class DateRangeSelectorSheet extends StatelessWidget {
     
     if (picked != null) {
       dateRange.setDateRange(picked.start, picked.end);
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
   
-  // 选择本周
+  // Select current week
   void _selectWeek(BuildContext context, DateRangeModel dateRange) {
     dateRange.setCurrentWeek();
   }
   
-  // 选择今天
+  // Select today
   void _selectToday(BuildContext context, DateRangeModel dateRange) {
     dateRange.setToday();
   }
   
-  // 选择今年
+  // Select current year
   void _selectYear(BuildContext context, DateRangeModel dateRange) {
     dateRange.setCurrentYear();
   }
   
-  // 选择本月
+  // Select current month
   void _selectMonth(BuildContext context, DateRangeModel dateRange) {
     dateRange.setCurrentMonth();
   }

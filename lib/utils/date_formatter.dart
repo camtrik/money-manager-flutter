@@ -15,6 +15,26 @@ class DateFormatter {
     return DateFormat('MMM d, yyyy', 'en').format(date);
   }
 
+  static String formatDateShort(BuildContext context, DateTime date) {
+    final locale = Localizations.localeOf(context);
+    
+    if (locale.languageCode == 'zh') {
+      return DateFormat('M月d日', 'zh').format(date);
+    } else if (locale.languageCode == 'ja') {
+      return DateFormat('M月d日', 'ja').format(date);
+    }
+    return DateFormat('MMM d', 'en').format(date);
+  }
+
+  static String formatYear(BuildContext context, DateTime date) {
+    final locale = Localizations.localeOf(context);
+    
+    if (locale.languageCode == 'zh' || locale.languageCode == 'ja') {
+      return DateFormat('yyyy年', locale.languageCode).format(date);
+    }
+    return DateFormat('yyyy', 'en').format(date);
+  }
+
   static String formatMonthYear(BuildContext context, DateTime date) {
     final locale = Localizations.localeOf(context);
     if (locale.languageCode == 'zh') {
