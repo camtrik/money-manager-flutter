@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/routes/app_routes.dart';
-import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:provider/provider.dart';
 

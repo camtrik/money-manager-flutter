@@ -25,6 +25,8 @@ class CategoryUtils {
         return l10n.categoryCommunication;
       case 'daily_necessities':
         return l10n.categoryDaily;
+      case 'clothing':
+        return l10n.categoryClothing;
       case 'other':
         return l10n.categoryOther;
       default:

@@ -4,8 +4,9 @@ import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/routes/app_routes.dart';
-import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/edit_tx_sheet.dart';
+import 'package:money_manager/view_models/date_range_model.dart';
+import 'package:money_manager/widgets/date_range_selector.dart';
 
 import 'package:money_manager/screens/manage_category_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
@@ -14,12 +15,16 @@ import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final List<Transaction> txs = context.watch<TxListModel>().all;
+    final txListModel = context.watch<TxListModel>();
+    final dateRange = context.watch<DateRangeModel>(); // get date range
+    
+    // get filtered transactions by date range
+    final List<Transaction> txs = txListModel.getFilteredByDateRange(dateRange);
     final Map<String, double> sums = {};
     final List<Category> categories = context.watch<CategoryListModel>().all;
 
@@ -135,6 +140,14 @@ class CategoryScreen extends StatelessWidget {
       // Wrap main content with Expanded, allowing it to stretch within available space
       child: Column(
         children: [
+          // data range selector 
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Center(
+              child: DateRangeSelector(),
+            ),
+          ),
+          
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -347,3 +360,4 @@ class CategoryScreen extends StatelessWidget {
 int min(int a, int b) {
   return a < b ? a : b;
 }
+

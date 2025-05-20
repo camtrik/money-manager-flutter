@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/routes/app_routes.dart';
 import 'package:money_manager/routes/route_generator.dart';
-import 'package:money_manager/screens/settings_screen.dart';
-import 'package:money_manager/screens/tx_screen.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
+import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/view_models/settings_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/services/storage_service.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
-import 'package:money_manager/screens/category_screen.dart';
 
 class LocaleProvider extends ChangeNotifier {
   Locale _locale = Locale('en');
@@ -36,6 +33,8 @@ void main() async {
         Provider<StorageService>.value(value: storageService), 
 
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        
+        ChangeNotifierProvider(create: (_) => DateRangeModel()),
 
         ChangeNotifierProxyProvider<StorageService, CategoryListModel>(
           create: (context) => CategoryListModel(
@@ -68,21 +67,13 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  int _currentIndex = 0;
-
-  // bottom navigation bar pages 
-  static const List<Widget> _pages = <Widget>[
-    CategoryScreen(),
-    TransactionScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     

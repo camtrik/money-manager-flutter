@@ -78,6 +78,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get categoryDaily => '日用品';
 
   @override
+  String get categoryClothing => '服';
+
+  @override
   String get categoryOther => 'その他';
 
   @override
@@ -155,4 +158,40 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get deleteTransaction => 'この取引は削除されます。この操作は元に戻せません';
+
+  @override
+  String get selectSpecificDate => '特定の日付を選択';
+
+  @override
+  String get viewByDay => '日別表示';
+
+  @override
+  String get viewByWeek => '週別表示';
+
+  @override
+  String get viewByMonth => '月別表示';
+
+  @override
+  String get viewByYear => '年別表示';
+
+  @override
+  String get customDateRange => 'カスタム期間';
+
+  @override
+  String get periodTitle => '期間';
+
+  @override
+  String get selectRange => '範囲を選択';
+
+  @override
+  String get allTime => '全期間';
+
+  @override
+  String get week => '週';
+
+  @override
+  String get year => '年';
+
+  @override
+  String get month => '月';
 }

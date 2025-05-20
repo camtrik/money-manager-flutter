@@ -78,6 +78,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryDaily => 'Daily';
 
   @override
+  String get categoryClothing => 'Clothes';
+
+  @override
   String get categoryOther => 'Other';
 
   @override
@@ -155,4 +158,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteTransaction => 'This transaction will be deleted, this operation cannot be undone';
+
+  @override
+  String get selectSpecificDate => 'Select Specific Date';
+
+  @override
+  String get viewByDay => 'View by Day';
+
+  @override
+  String get viewByWeek => 'View by Week';
+
+  @override
+  String get viewByMonth => 'View by Month';
+
+  @override
+  String get viewByYear => 'View by Year';
+
+  @override
+  String get customDateRange => 'Custom Date Range';
+
+  @override
+  String get periodTitle => 'Period';
+
+  @override
+  String get selectRange => 'Select Range';
+
+  @override
+  String get allTime => 'All Time';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get month => 'Month';
 }

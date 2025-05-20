@@ -235,6 +235,12 @@ abstract class AppLocalizations {
   /// **'Daily'**
   String get categoryDaily;
 
+  /// No description provided for @categoryClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothes'**
+  String get categoryClothing;
+
   /// No description provided for @categoryOther.
   ///
   /// In en, this message translates to:
@@ -384,6 +390,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This transaction will be deleted, this operation cannot be undone'**
   String get deleteTransaction;
+
+  /// No description provided for @selectSpecificDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Specific Date'**
+  String get selectSpecificDate;
+
+  /// No description provided for @viewByDay.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Day'**
+  String get viewByDay;
+
+  /// No description provided for @viewByWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Week'**
+  String get viewByWeek;
+
+  /// No description provided for @viewByMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Month'**
+  String get viewByMonth;
+
+  /// No description provided for @viewByYear.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Year'**
+  String get viewByYear;
+
+  /// No description provided for @customDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Date Range'**
+  String get customDateRange;
+
+  /// No description provided for @periodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get periodTitle;
+
+  /// No description provided for @selectRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Range'**
+  String get selectRange;
+
+  /// No description provided for @allTime.
+  ///
+  /// In en, this message translates to:
+  /// **'All Time'**
+  String get allTime;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

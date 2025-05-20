@@ -23,6 +23,7 @@
   "categoryHousing": "住房",
   "categoryCommunication": "通讯",
   "categoryDaily": "日用",
+  "categoryClothing": "服装", 
   "categoryOther": "其他",
   "addCategory": "添加分类",
   "editCategory": "编辑分类",
@@ -50,5 +51,19 @@
   "confirmDeleteCategory": "确定要删除 {name} 吗？",
   "deleteRelatedTransactions": "与该类别关联的所有交易记录({count})将会被删除。",
   "confirmDeleteTransaction": "确定要删除该交易吗？",
-  "deleteTransaction": "交易将被删除,该操作无法撤销"
+  "deleteTransaction": "交易将被删除,该操作无法撤销",
+  
+  "selectSpecificDate": "选择特定日期",
+  "viewByDay": "按天查看",
+  "viewByWeek": "按周查看",
+  "viewByMonth": "按月查看",
+  "viewByYear": "按年查看",
+  "customDateRange": "自定义范围",
+  
+  "periodTitle": "周期",
+  "selectRange": "选择范围",
+  "allTime": "所有时间",
+  "week": "周",
+  "year": "年",
+  "month": "月"
 }
