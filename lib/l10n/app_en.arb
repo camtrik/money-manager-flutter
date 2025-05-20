@@ -51,6 +51,12 @@
   "confirmDeleteCategory": "Are you sure you want to delete the \"{name}\" category?",
   "deleteRelatedTransactions": "This will also delete all related transactions({count}).",
   "confirmDeleteTransaction": "Are you sure you want to delete this transaction?",
-  "deleteTransaction": "This transaction will be deleted, this operation cannot be undone"
+  "deleteTransaction": "This transaction will be deleted, this operation cannot be undone",
 
+  "selectSpecificDate": "Select Specific Date",
+  "viewByDay": "View by Day",
+  "viewByWeek": "View by Week",
+  "viewByMonth": "View by Month",
+  "viewByYear": "View by Year",
+  "customDateRange": "Custom Date Range"
 }

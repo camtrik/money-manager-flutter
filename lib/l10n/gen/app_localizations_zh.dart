@@ -158,4 +158,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get deleteTransaction => '交易将被删除,该操作无法撤销';
+
+  @override
+  String get selectSpecificDate => '选择特定日期';
+
+  @override
+  String get viewByDay => '按天查看';
+
+  @override
+  String get viewByWeek => '按周查看';
+
+  @override
+  String get viewByMonth => '按月查看';
+
+  @override
+  String get viewByYear => '按年查看';
+
+  @override
+  String get customDateRange => '自定义范围';
 }

@@ -390,6 +390,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This transaction will be deleted, this operation cannot be undone'**
   String get deleteTransaction;
+
+  /// No description provided for @selectSpecificDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Specific Date'**
+  String get selectSpecificDate;
+
+  /// No description provided for @viewByDay.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Day'**
+  String get viewByDay;
+
+  /// No description provided for @viewByWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Week'**
+  String get viewByWeek;
+
+  /// No description provided for @viewByMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Month'**
+  String get viewByMonth;
+
+  /// No description provided for @viewByYear.
+  ///
+  /// In en, this message translates to:
+  /// **'View by Year'**
+  String get viewByYear;
+
+  /// No description provided for @customDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Date Range'**
+  String get customDateRange;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

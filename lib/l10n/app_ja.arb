@@ -51,5 +51,12 @@
   "confirmDeleteCategory": "「{name}」カテゴリを削除してもよろしいですか？",
   "deleteRelatedTransactions": "これにより関連する取引({count})も削除されます。",
   "confirmDeleteTransaction": "この取引を削除してもよろしいですか？",
-  "deleteTransaction": "この取引は削除されます。この操作は元に戻せません"
+  "deleteTransaction": "この取引は削除されます。この操作は元に戻せません",
+  
+  "selectSpecificDate": "特定の日付を選択",
+  "viewByDay": "日別表示",
+  "viewByWeek": "週別表示",
+  "viewByMonth": "月別表示",
+  "viewByYear": "年別表示",
+  "customDateRange": "カスタム期間"
 }

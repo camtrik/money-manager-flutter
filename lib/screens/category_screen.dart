@@ -22,9 +22,9 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final txListModel = context.watch<TxListModel>();
-    final dateRange = context.watch<DateRangeModel>(); // 获取日期范围
+    final dateRange = context.watch<DateRangeModel>(); // get date range
     
-    // 使用日期范围过滤交易记录
+    // get filtered transactions by date range
     final List<Transaction> txs = txListModel.getFilteredByDateRange(dateRange);
     final Map<String, double> sums = {};
     final List<Category> categories = context.watch<CategoryListModel>().all;
