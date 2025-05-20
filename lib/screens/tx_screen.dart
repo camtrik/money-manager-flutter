@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/screens/edit_tx_sheet.dart';
 import 'package:money_manager/screens/manage_tx_sheet.dart';
@@ -100,7 +99,7 @@ class TransactionScreen extends StatelessWidget {
 
   Widget _buildDateHeader(BuildContext context, String dateKey, double total) {
     final date = DateFormatter.parseDateKey(dateKey);
-    final locale = Localizations.localeOf(context).languageCode;
+    // final locale = Localizations.localeOf(context).languageCode;
     final dayOfWeek = DateFormatter.getDayOfWeek(context, dateKey);
     final monthYear = DateFormatter.formatMonthYear(context, date);    
     return Container(

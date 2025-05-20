@@ -192,7 +192,6 @@ class DateRangeModel extends ChangeNotifier {
         return '${_startDate.year}年';
       case DateRangeType.allTime:
         return 'All Time';
-      case DateRangeType.custom:
       default:
         return '${_startDate.year}/${_startDate.month}/${_startDate.day} - ${_endDate.year}/${_endDate.month}/${_endDate.day}';
     }

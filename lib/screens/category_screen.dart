@@ -4,7 +4,6 @@ import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/routes/app_routes.dart';
-import 'package:money_manager/screens/edit_category_screen.dart';
 import 'package:money_manager/screens/edit_tx_sheet.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/widgets/date_range_selector.dart';
@@ -16,7 +15,7 @@ import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -362,19 +361,3 @@ int min(int a, int b) {
   return a < b ? a : b;
 }
 
-extension ColorExtension on Color {
-  // Set all components of color (red, green, blue, alpha) at once
-  Color withValues({int? red, int? green, int? blue, double? alpha}) {
-    return Color.fromARGB(
-      (alpha != null) ? (alpha * 255).round() : this.alpha,
-      red ?? this.red,
-      green ?? this.green,
-      blue ?? this.blue,
-    );
-  }
-  
-  // Helper function that returns an integer value for Hive
-  int toARGB32() {
-    return value;
-  }
-}

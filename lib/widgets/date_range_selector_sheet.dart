@@ -5,7 +5,7 @@ import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:provider/provider.dart';
 
 class DateRangeSelectorSheet extends StatelessWidget {
-  const DateRangeSelectorSheet({Key? key}) : super(key: key);
+  const DateRangeSelectorSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class DateRangeSelectorSheet extends StatelessWidget {
     
     // Calculate grid width with padding and margins
     final screenWidth = MediaQuery.of(context).size.width;
-    final gridWidth = (screenWidth - 32) / 2; // 16px padding on each side
+    // final gridWidth = (screenWidth - 32) / 2; // 16px padding on each side
     
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -254,17 +254,18 @@ class DateRangeSelectorSheet extends StatelessWidget {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Colors.blue.shade400,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Colors.black,
-            ),
-          ),
-          child: child!,
-        );
+        return child!;
+        // return Theme(
+        //   data: ThemeData.light().copyWith(
+        //     colorScheme: ColorScheme.light(
+        //       primary: Colors.blue,
+        //       onPrimary: Colors.white,
+        //       surface: Colors.white,
+        //       onSurface: Colors.black,
+        //     ),
+        //   ),
+        //   child: child!,
+        // );
       },
     );
     

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/utils/date_formatter.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
@@ -58,7 +57,8 @@ class DateRangeSelector extends StatelessWidget {
         nextCallback = () {};
         break;
         
-      case DateRangeType.month:
+      // case DateRangeType.month:
+        
       default:
         displayText = DateFormatter.formatMonthYear(context, dateRange.startDate);
         
