@@ -13,6 +13,7 @@ class DateRangeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final dateRange = Provider.of<DateRangeModel>(context);
     final l10n = AppLocalizations.of(context)!;
+    final screenWidth = MediaQuery.of(context).size.width;
     
     String displayText;
     Widget? dayIndicator;
@@ -90,54 +91,65 @@ class DateRangeSelector extends StatelessWidget {
         break;
     }
     
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.pink.shade50,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Left arrow
-          IconButton(
-            icon: Icon(Icons.chevron_left, color: Colors.red.shade400),
-            onPressed: previousCallback,
-          ),
-          // Date selector
-          GestureDetector(
-            onTap: () => _showDateRangeSelectorSheet(context),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Day indicator (only shown in month view)
-                if (dayIndicator != null) ...[
-                  dayIndicator,
-                  const SizedBox(width: 8),
-                ],
-                // Display date text
-                Text(
-                  displayText,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.red,
-                ),
-              ],
+    final selectorWidth = screenWidth * 0.6;
+    
+    return Center(
+      child: Container(
+        width: selectorWidth,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.pink.shade50,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // Left arrow
+            IconButton(
+              icon: Icon(Icons.chevron_left, color: Colors.red.shade400),
+              onPressed: previousCallback,
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(8),
             ),
-          ),
-          // Right arrow
-          IconButton(
-            icon: Icon(Icons.chevron_right, color: Colors.red.shade400),
-            onPressed: nextCallback,
-          ),
-        ],
+            // Date selector
+            Expanded(
+              child: GestureDetector(
+                onTap: () => _showDateRangeSelectorSheet(context),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Day indicator (only shown in month view)
+                    if (dayIndicator != null) ...[
+                      dayIndicator,
+                      const SizedBox(width: 8),
+                    ],
+                    // Display date text
+                    Flexible(
+                      child: Text(
+                        displayText,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+              ),
+            ),
+            // Right arrow
+            IconButton(
+              icon: Icon(Icons.chevron_right, color: Colors.red.shade400),
+              onPressed: nextCallback,
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(8),
+            ),
+          ],
+        ),
       ),
     );
   }

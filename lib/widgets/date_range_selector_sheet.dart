@@ -92,7 +92,12 @@ class DateRangeSelectorSheet extends StatelessWidget {
                 Icons.calendar_today,
                 l10n.selectSpecificDate,
                 "",
-                () => _selectSpecificDate(context, dateRange),
+                () async {
+                  await _selectSpecificDate(context, dateRange);
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                },
                 false,
               ),
               
@@ -168,7 +173,6 @@ class DateRangeSelectorSheet extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         onTap();
-        Navigator.of(context).pop();
       },
       child: Container(
         margin: const EdgeInsets.all(2), // Even smaller margins
@@ -218,6 +222,7 @@ class DateRangeSelectorSheet extends StatelessWidget {
   // Select all time range
   void _selectAllTime(BuildContext context, DateRangeModel dateRange) {
     dateRange.setAllTime();
+    Navigator.of(context).pop();
   }
   
   // Select specific date (opens date picker for a single day)
@@ -274,20 +279,24 @@ class DateRangeSelectorSheet extends StatelessWidget {
   // Select current week
   void _selectWeek(BuildContext context, DateRangeModel dateRange) {
     dateRange.setCurrentWeek();
+    Navigator.of(context).pop();
   }
   
   // Select today
   void _selectToday(BuildContext context, DateRangeModel dateRange) {
     dateRange.setToday();
+    Navigator.of(context).pop();
   }
   
   // Select current year
   void _selectYear(BuildContext context, DateRangeModel dateRange) {
     dateRange.setCurrentYear();
+    Navigator.of(context).pop();
   }
   
   // Select current month
   void _selectMonth(BuildContext context, DateRangeModel dateRange) {
     dateRange.setCurrentMonth();
+    Navigator.of(context).pop();
   }
 } 
