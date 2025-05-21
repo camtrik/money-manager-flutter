@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:money_manager/models/category.dart';
 import 'package:money_manager/models/transaction.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
+import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 
 class EditTransactionSheet extends StatefulWidget {
@@ -28,6 +29,7 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
   bool _isEditMode = false;
   String? _errorMessage;
   String _currency = 'CNY'; // TODO: implement other currencies 
+  bool _dateInitialized = false; 
   
   @override
   void initState() {
@@ -35,9 +37,38 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
     _selectedCategory = widget.category;
     _isEditMode = widget.tx != null; 
     _amount = widget.tx != null ? OtherUtils.formatAmount(widget.tx!.amount) : "0";
-    _date = widget.tx?.occurredAt ?? DateTime.now();
+    
+    if (_isEditMode) {
+      _date = widget.tx!.occurredAt;
+      _dateInitialized = true;
+    } else {
+      _date = DateTime.now();
+    }
+
+    
+    
     _notesController.text = widget.tx?.notes ?? '';
     _selectedCategory = widget.tx?.category ?? widget.category;
+  }
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    
+    // set date to current date if not in edit mode and date is not initialized
+    if (!_isEditMode && !_dateInitialized) {
+      final dateRange = Provider.of<DateRangeModel>(context, listen: false);
+      final now = DateTime.now();
+      
+      if (dateRange.isInRange(now)) {
+        _date = now;
+      } 
+      else {
+        _date = dateRange.endDate;
+      }
+      
+      _dateInitialized = true;
+    }
   }
 
   void _onNumberPressed(String value) {
