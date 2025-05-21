@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
-import 'package:money_manager/screens/edit_tx_sheet.dart';
-import 'package:money_manager/screens/manage_tx_sheet.dart';
+import 'package:money_manager/widgets/edit_tx_sheet.dart';
+import 'package:money_manager/widgets/manage_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/utils/currency_formatter.dart';
 import 'package:money_manager/utils/date_formatter.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/models/transaction.dart';
-import 'package:money_manager/screens/edit_tx_sheet.dart';
+import 'package:money_manager/widgets/edit_tx_sheet.dart';
 import 'package:money_manager/utils/category_utils.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:provider/provider.dart';
