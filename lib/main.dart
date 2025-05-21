@@ -80,6 +80,7 @@ class _MyAppState extends State<MyApp> {
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, _) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           locale: settingsProvider.locale,
           localizationsDelegates: const [
             AppLocalizations.delegate, 
