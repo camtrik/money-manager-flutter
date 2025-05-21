@@ -9,7 +9,7 @@ import 'package:money_manager/utils/date_formatter.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/widgets/date_range_selector.dart';
-import 'package:money_manager/widgets/swipeable_content_wrapper.dart';
+import 'package:money_manager/widgets/smooth_swipeable_content_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
@@ -32,59 +32,57 @@ class TransactionScreen extends StatelessWidget {
             ),
           ),
           
-          // Wrap the transaction list with SwipeableContentWrapper
+          // 使用SmoothSwipeableContent替代SwipeableContentWrapper
           Expanded(
-            child: SwipeableContentWrapper(
-              child: Consumer<DateRangeModel>(
-                builder: (context, dateRange, _) {
-                  final txListModel = context.watch<TxListModel>();
-                  
-                  // 使用日期范围过滤交易记录
-                  final List<Transaction> filteredTransactions = txListModel.getFilteredByDateRange(dateRange);
-                  final defaultCategory = context.read<CategoryListModel>().getById("other")!;
+            child: SmoothSwipeableContent(
+              contentBuilder: (context, dateRange) {
+                final txListModel = context.watch<TxListModel>();
+                
+                // 使用日期范围过滤交易记录
+                final List<Transaction> filteredTransactions = txListModel.getFilteredByDateRange(dateRange);
+                final defaultCategory = context.read<CategoryListModel>().getById("other")!;
 
-                  // Group transactions by date
-                  final Map<String, List<Transaction>> groupedTransactions = {};
-                  final Map<String, double> dailyTotals = {};
+                // Group transactions by date
+                final Map<String, List<Transaction>> groupedTransactions = {};
+                final Map<String, double> dailyTotals = {};
 
-                  for (var tx in filteredTransactions) {
-                    final dateKey = DateFormatter.formatDateKey(tx.occurredAt);
-                    if (!groupedTransactions.containsKey(dateKey)) {
-                      groupedTransactions[dateKey] = [];
-                      dailyTotals[dateKey] = 0;
-                    }
-                    groupedTransactions[dateKey]!.add(tx);
-                    dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + tx.amount;
+                for (var tx in filteredTransactions) {
+                  final dateKey = DateFormatter.formatDateKey(tx.occurredAt);
+                  if (!groupedTransactions.containsKey(dateKey)) {
+                    groupedTransactions[dateKey] = [];
+                    dailyTotals[dateKey] = 0;
                   }
+                  groupedTransactions[dateKey]!.add(tx);
+                  dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + tx.amount;
+                }
 
-                  // Sort dates in descending order (newest first)
-                  final sortedDates = groupedTransactions.keys.toList()
-                    ..sort((a, b) => DateFormatter.parseDateKey(b).compareTo(DateFormatter.parseDateKey(a)));
+                // Sort dates in descending order (newest first)
+                final sortedDates = groupedTransactions.keys.toList()
+                  ..sort((a, b) => DateFormatter.parseDateKey(b).compareTo(DateFormatter.parseDateKey(a)));
 
-                  return filteredTransactions.isEmpty
-                    ? Center(child: Text(l10n.noTransactions))
-                    : ListView.builder(
-                        itemCount: sortedDates.length,
-                        itemBuilder: (context, index) {
-                          final dateKey = sortedDates[index];
-                          final transactions = groupedTransactions[dateKey]!;
-                          final total = dailyTotals[dateKey] ?? 0.0;
-                          
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Date header with total
-                              _buildDateHeader(context, dateKey, total),
-                              // Transactions for this date
-                              ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
-                              // Add a divider between date groups
-                              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-                            ],
-                          );
-                        },
-                      );
-                },
-              ),
+                return filteredTransactions.isEmpty
+                  ? Center(child: Text(l10n.noTransactions))
+                  : ListView.builder(
+                      itemCount: sortedDates.length,
+                      itemBuilder: (context, index) {
+                        final dateKey = sortedDates[index];
+                        final transactions = groupedTransactions[dateKey]!;
+                        final total = dailyTotals[dateKey] ?? 0.0;
+                        
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Date header with total
+                            _buildDateHeader(context, dateKey, total),
+                            // Transactions for this date
+                            ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
+                            // Add a divider between date groups
+                            const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
+                          ],
+                        );
+                      },
+                    );
+              },
             ),
           ),
         ],
