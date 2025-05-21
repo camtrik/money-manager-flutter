@@ -69,8 +69,8 @@ class DateRangeSelector extends StatelessWidget {
         ).day;
         
         dayIndicator = Container(
-          width: 36,
-          height: 36,
+          width: screenWidth * 0.08,
+          height: screenWidth * 0.08,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.red.shade400,
@@ -91,12 +91,12 @@ class DateRangeSelector extends StatelessWidget {
         break;
     }
     
-    final selectorWidth = screenWidth * 0.6;
+    final selectorWidth = screenWidth * 0.7;
     
     return Center(
       child: Container(
         width: selectorWidth,
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
           color: Colors.pink.shade50,
           borderRadius: BorderRadius.circular(30),
@@ -130,7 +130,7 @@ class DateRangeSelector extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 12,
                         ),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,

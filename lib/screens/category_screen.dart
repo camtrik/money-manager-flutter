@@ -259,15 +259,18 @@ class CategoryScreen extends StatelessWidget {
       onTap: () {
         showModalBottomSheet(
           context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => EditTransactionSheet(category: category),
+          isScrollControlled: true, 
+          useSafeArea: true, 
+          backgroundColor: Colors.transparent, 
+          builder: (context) {
+            return EditTransactionSheet(category: category);
+          },
         );
       },
       onLongPress: () {
         showModalBottomSheet(
           context: context,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.white, 
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),

@@ -123,14 +123,17 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
     showModalBottomSheet(
       context: context, 
       isScrollControlled: true, 
+      useSafeArea: true,
       backgroundColor: Colors.transparent, 
-      builder: (context) => SelectCategorySheet(
-        onCategorySelected: (selectedCategory) {
-          setState(() {
-            _selectedCategory = selectedCategory;
-          });
-        }
-      )
+      builder: (context) {
+        return SelectCategorySheet(
+          onCategorySelected: (selectedCategory) {
+            setState(() {
+              _selectedCategory = selectedCategory;
+            });
+          }
+        );
+      }
     );
   }
 
@@ -145,233 +148,236 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
     final l10n = AppLocalizations.of(context)!;
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    // Get safe area padding to adjust for notches and system UI
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     
-    // Calculate adaptive sizes for handle bar
-    final handleWidth = screenWidth * 0.1; // 10% of screen width
-    final handleHeight = 4.0; // Keep fixed height for handle
-    final handleMargin = screenHeight * 0.015; // 1.5% of screen height
+    final handleWidth = screenWidth * 0.1;
+    final handleHeight = 4.0;
+    final handleMargin = screenHeight * 0.015;
     
-    return Container(
-      // Use SafeArea to respect system UI (notches, home indicators)
-      height: screenHeight * 0.7,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      child: SafeArea(
-        top: false, // Top is already handled by the modal sheet
-        child: Column(
-          children: [
-            // Handle bar - adaptive width
-            Container(
-              width: handleWidth,
-              height: handleHeight,
-              margin: EdgeInsets.symmetric(vertical: handleMargin),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(2),
-              ),
+    // 固定表单高度
+    final containerHeight = screenHeight * 0.7;
+    
+    return GestureDetector(
+      onTap: () {
+        // 点击表单的非交互区域时收起键盘
+        FocusScope.of(context).unfocus();
+      },
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          height: containerHeight,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
-
-            // Header with category type - adaptive padding and sizes
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.04, // 4% of screen width
-              ), 
-              child: Center(
-                child: GestureDetector(
-                  onTap: _showCategoryPicker,
-                  child: Container(
-                    // Adaptive padding based on screen size
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.05, // 5% of screen width
-                      vertical: screenHeight * 0.015, // 1.5% of screen height
-                    ),
-                    decoration: BoxDecoration(
-                      color: Color(_selectedCategory.colorValue).withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(screenWidth * 0.06), // 6% of screen width
-                      border: Border.all(
-                        color: Color(_selectedCategory.colorValue).withValues(alpha: 0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Avatar with adaptive size
-                        CircleAvatar(
-                          radius: screenWidth * 0.045, // 4.5% of screen width
-                          backgroundColor: Color(_selectedCategory.colorValue).withValues(alpha: 0.2),
-                          child: Icon(
-                            _selectedCategory.icon,
-                            size: screenWidth * 0.045, // Match radius
-                          ),
-                        ),
-                        // Adaptive spacing
-                        SizedBox(width: screenWidth * 0.03), // 3% of screen width
-                        // Use Flexible to prevent overflow with long category names
-                        Flexible(
-                          child: Text(
-                            CategoryUtils.getLocalizedName(context, _selectedCategory.id, _selectedCategory.name),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenWidth * 0.04, // 4% of screen width
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SizedBox(width: screenWidth * 0.02), // 2% of screen width
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Color(_selectedCategory.colorValue),
-                          size: screenWidth * 0.06, // 6% of screen width
-                        ),
-                      ],
-                    ),
+          ),
+          child: SafeArea(
+            top: false,
+            bottom: true,
+            child: Column(
+              children: [
+                // Handle bar
+                Container(
+                  width: handleWidth,
+                  height: handleHeight,
+                  margin: EdgeInsets.symmetric(vertical: handleMargin),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-              ),
-            ), 
-          
-            // Adaptive spacing
-            SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
-            // Amount display section
-            Text(
-              l10n.expense,
-              style: TextStyle(color: Colors.grey.shade600, fontSize: screenWidth * 0.04),
-            ),
-            SizedBox(height: screenHeight * 0.01), // 1% of screen height
-            // Use FittedBox for amount to ensure it scales properly for very long numbers
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                '¥ $_amount',
-                style: TextStyle(
-                  fontSize: screenWidth * 0.06,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-
-            SizedBox(height: screenHeight * 0.02), // 2% of screen height
-
-            // Note field with adaptive padding
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // 4% of screen width
-              child: TextField(
-                controller: _notesController,
-                decoration: InputDecoration(
-                  hintText: l10n.notes,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                  // Adaptive padding for text field
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.04, // 4% of screen width
-                    vertical: screenHeight * 0.015, // 1.5% of screen height
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: screenHeight * 0.02), // 2% of screen height
-
-            // Calculator buttons - keeping original implementation as requested
-            Expanded(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 400),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                // Content area
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        // First row
-                        _buildButtonRow([
-                          _buildOperatorButton('÷'),
-                          _buildCalculatorButton('7', onPressed: () => _onNumberPressed('7')),
-                          _buildCalculatorButton('8', onPressed: () => _onNumberPressed('8')),
-                          _buildCalculatorButton('9', onPressed: () => _onNumberPressed('9')),
-                          _buildIconButton(Icons.backspace_outlined, onPressed: _onDeletePressed),
-                        ]),
-                        const SizedBox(height: 8),
-                        
-                        // Second row
-                        _buildButtonRow([
-                          _buildOperatorButton('×'),
-                          _buildCalculatorButton('4', onPressed: () => _onNumberPressed('4')),
-                          _buildCalculatorButton('5', onPressed: () => _onNumberPressed('5')),
-                          _buildCalculatorButton('6', onPressed: () => _onNumberPressed('6')),
-                          _buildCalculatorButton('AC', onPressed: _onClearPressed),
-                          
-                        ]),
-                        const SizedBox(height: 8),
-                        
-                        // Third row
-                        _buildButtonRow([
-                          _buildOperatorButton('-'),
-                          _buildCalculatorButton('1', onPressed: () => _onNumberPressed('1')),
-                          _buildCalculatorButton('2', onPressed: () => _onNumberPressed('2')),
-                          _buildCalculatorButton('3', onPressed: () => _onNumberPressed('3')),
-                          _buildIconButton(Icons.calendar_today, onPressed: _showDatePicker),
-                        ]),
-                        const SizedBox(height: 8),
-                        
-                        // Fourth row
-                        _buildButtonRow([
-                          _buildOperatorButton('+'),
-                          _buildCalculatorButton('0', onPressed: () => _onNumberPressed('0')),
-                          _buildCalculatorButton('.', onPressed: _onDecimalPressed),
-                          _buildCalculatorButton('¥', onPressed: () {}),
-                          _buildIconButton(
-                            Icons.check, 
-                            onPressed: _saveTransaction,
-                            backgroundColor: Color(_selectedCategory.colorValue),
-                            iconColor: Colors.white,
+                        // Header with category type
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.04,
+                          ), 
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: _showCategoryPicker,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.05,
+                                  vertical: screenHeight * 0.015,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(_selectedCategory.colorValue).withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(screenWidth * 0.06),
+                                  border: Border.all(
+                                    color: Color(_selectedCategory.colorValue).withValues(alpha: 0.3),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: screenWidth * 0.045,
+                                      backgroundColor: Color(_selectedCategory.colorValue).withValues(alpha: 0.2),
+                                      child: Icon(
+                                        _selectedCategory.icon,
+                                        size: screenWidth * 0.045,
+                                      ),
+                                    ),
+                                    SizedBox(width: screenWidth * 0.03),
+                                    Flexible(
+                                      child: Text(
+                                        CategoryUtils.getLocalizedName(context, _selectedCategory.id, _selectedCategory.name),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: screenWidth * 0.04,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    SizedBox(width: screenWidth * 0.02),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Color(_selectedCategory.colorValue),
+                                      size: screenWidth * 0.06,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                        ]),
+                        ), 
+                      
+                        SizedBox(height: screenHeight * 0.02),
+
+                        // Amount display
+                        Text(
+                          l10n.expense,
+                          style: TextStyle(color: Colors.grey.shade600, fontSize: screenWidth * 0.04),
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '¥ $_amount',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.06,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: screenHeight * 0.02),
+
+                        // Note field
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.04,
+                          ),
+                          child: TextField(
+                            controller: _notesController,
+                            decoration: InputDecoration(
+                              hintText: l10n.notes,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(color: Colors.grey.shade300),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.04,
+                                vertical: screenHeight * 0.015,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: screenHeight * 0.02),
+
+                        // Calculator buttons
+                        Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                children: [
+                                  _buildButtonRow([
+                                    _buildOperatorButton('÷'),
+                                    _buildCalculatorButton('7', onPressed: () => _onNumberPressed('7')),
+                                    _buildCalculatorButton('8', onPressed: () => _onNumberPressed('8')),
+                                    _buildCalculatorButton('9', onPressed: () => _onNumberPressed('9')),
+                                    _buildIconButton(Icons.backspace_outlined, onPressed: _onDeletePressed),
+                                  ]),
+                                  const SizedBox(height: 8),
+                                  _buildButtonRow([
+                                    _buildOperatorButton('×'),
+                                    _buildCalculatorButton('4', onPressed: () => _onNumberPressed('4')),
+                                    _buildCalculatorButton('5', onPressed: () => _onNumberPressed('5')),
+                                    _buildCalculatorButton('6', onPressed: () => _onNumberPressed('6')),
+                                    _buildCalculatorButton('AC', onPressed: _onClearPressed),
+                                  ]),
+                                  const SizedBox(height: 8),
+                                  _buildButtonRow([
+                                    _buildOperatorButton('-'),
+                                    _buildCalculatorButton('1', onPressed: () => _onNumberPressed('1')),
+                                    _buildCalculatorButton('2', onPressed: () => _onNumberPressed('2')),
+                                    _buildCalculatorButton('3', onPressed: () => _onNumberPressed('3')),
+                                    _buildIconButton(Icons.calendar_today, onPressed: _showDatePicker),
+                                  ]),
+                                  const SizedBox(height: 8),
+                                  _buildButtonRow([
+                                    _buildOperatorButton('+'),
+                                    _buildCalculatorButton('0', onPressed: () => _onNumberPressed('0')),
+                                    _buildCalculatorButton('.', onPressed: _onDecimalPressed),
+                                    _buildCalculatorButton('¥', onPressed: () {}),
+                                    _buildIconButton(
+                                      Icons.check, 
+                                      onPressed: _saveTransaction,
+                                      backgroundColor: Color(_selectedCategory.colorValue),
+                                      iconColor: Colors.white,
+                                    ),
+                                  ]),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        if (_errorMessage != null) ...[
+                          Text(
+                            _errorMessage!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: screenWidth * 0.035,
+                            ),
+                          ),
+                        ],
+
+                        // Date display
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: screenWidth * 0.04,
+                            right: screenWidth * 0.04,
+                            top: screenHeight * 0.01,
+                            bottom: (bottomPadding > 0 ? bottomPadding : screenHeight * 0.02) + 16,
+                          ),
+                          child: Text(
+                            '${l10n.today}, ${DateFormatter.formatDate(context, _date)}',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: screenWidth * 0.035,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-
-            // Error message with adaptive font size
-            if (_errorMessage != null) ...[
-              Text(
-                _errorMessage!,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: screenWidth * 0.035, // 3.5% of screen width
-                ),
-              ),
-            ],
-
-            // Date display at bottom with adaptive padding and font size
-            Padding(
-              padding: EdgeInsets.only(
-                left: screenWidth * 0.04, // 4% of screen width
-                right: screenWidth * 0.04, // 4% of screen width
-                top: screenHeight * 0.01, // 1% of screen height
-                bottom: (bottomPadding > 0 ? bottomPadding : screenHeight * 0.02), // Use system padding or fallback
-              ),
-              child: Text(
-                '${l10n.today}, ${DateFormatter.formatDate(context, _date)}',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: screenWidth * 0.035, // 3.5% of screen width
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
