@@ -1,4 +1,4 @@
-// lib/widgets/smooth_swipeable_content.dart
+// lib/widgets/smooth_swipeable_content_wrapper.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +38,12 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
   // 存储主日期范围模型的引用
   late DateRangeModel _mainDateRange;
   
+  // 记录当前实际页面索引
+  int _activePageIndex = _currentPageIndex;
+  
+  // 缓存页面内容，防止闪烁
+  final Map<int, Widget> _cachedPageContents = {};
+  
   @override
   void initState() {
     super.initState();
@@ -46,13 +52,13 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     _pageController = PageController(
       initialPage: _currentPageIndex,
       viewportFraction: 1.0,
-      keepPage: true,
+      keepPage: false, // 设置为false以避免保持页面状态导致的闪烁
     );
     
     // 初始化过渡动画控制器
     _transitionController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 150),
     );
     
     // 初始化三个页面的日期范围模型
@@ -89,6 +95,9 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     
     // 后一页使用"下一个"日期范围
     _pageModels[_nextPageIndex] = _createNextDateRange(mainModel);
+    
+    // 清除缓存的页面内容
+    _cachedPageContents.clear();
     
     // 确保UI更新
     if (mounted) setState(() {});
@@ -143,6 +152,8 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     if (_isHandlingPageChange || !_pageController.hasClients) return;
     
     // 获取当前页面位置
+    if (!_pageController.position.hasContentDimensions) return;
+    
     final currentPosition = _pageController.page!;
     
     // 检测页面是否已经完全滑动到新位置
@@ -156,6 +167,9 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
   void _handlePageChange(int pageIndex) {
     if (_isHandlingPageChange) return;
     _isHandlingPageChange = true;
+    
+    // 记录新的活动页面索引
+    _activePageIndex = pageIndex;
     
     // 确保动画是平滑的
     _transitionController.forward(from: 0.0);
@@ -180,15 +194,25 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
       // 通知相关组件
       Provider.of<DateRangeModel>(context, listen: false).notifyListeners();
       
-      // 在模型更新后，重置页面控制器到中央位置，并使用动画
+      // 在数据更新完成后再重置页面，避免视觉闪烁
+      // 关键修改：我们不再使用动画跳转，而是直接跳转，并在跳转前后保持内容一致
       if (mounted && _pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPageIndex,
-          duration: const Duration(milliseconds: 1), // 极短的动画使跳转看不出来
-          curve: Curves.easeInOut,
-        ).then((_) {
-          // 动画完成后重新初始化页面模型
-          _resetPages();
+        // 使用WidgetsBinding确保在视觉更新之后执行跳转
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || !_pageController.hasClients) {
+            _isHandlingPageChange = false;
+            return;
+          }
+          
+          // 重要：在跳转前预先重置页面模型
+          _preResetPagesForIndex(pageIndex);
+          
+          // 直接跳转到中央页面，不使用动画
+          _pageController.jumpToPage(_currentPageIndex);
+          
+          // 跳转后完成剩余的页面重置
+          _completePageReset();
+          
           _isHandlingPageChange = false;
         });
       } else {
@@ -197,16 +221,35 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     });
   }
   
-  // 重置所有页面模型
-  void _resetPages() {
+  // 预先重置页面模型，保持视觉一致性
+  void _preResetPagesForIndex(int pageIndex) {
     if (!mounted) return;
     
-    // 更新三个页面的模型
+    final mainModel = Provider.of<DateRangeModel>(context, listen: false);
+    
+    // 缓存当前活动页面的内容
+    if (!_cachedPageContents.containsKey(pageIndex)) {
+      _cachedPageContents[pageIndex] = widget.contentBuilder(context, _pageModels[pageIndex]);
+    }
+    
+    // 重要：将当前活动页面的模型数据复制到中央页面
+    _pageModels[_currentPageIndex] = _cloneDateRange(mainModel);
+  }
+  
+  // 完成页面重置过程
+  void _completePageReset() {
+    if (!mounted) return;
+    
+    // 更新所有页面模型
     final mainModel = Provider.of<DateRangeModel>(context, listen: false);
     
     _pageModels[_currentPageIndex] = _cloneDateRange(mainModel);
     _pageModels[_prevPageIndex] = _createPreviousDateRange(mainModel);
     _pageModels[_nextPageIndex] = _createNextDateRange(mainModel);
+    
+    // 清除缓存
+    _cachedPageContents.clear();
+    _activePageIndex = _currentPageIndex;
     
     // 触发UI更新
     if (mounted) setState(() {});
@@ -260,19 +303,12 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     }
   }
   
-  // 监听主日期范围模型变化
-  void _onDateRangeChanged() {
-    // 当主模型发生变化时，重置页面
-    if (!_isHandlingPageChange && mounted) {
-      _resetPages();
-    }
-  }
-  
   @override
   void dispose() {
     _transitionController.dispose();
     _pageController.removeListener(_onPageScrollUpdate);
     _pageController.dispose();
+    _cachedPageContents.clear();
     super.dispose();
   }
   
@@ -287,7 +323,7 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
           
           // 使用postFrameCallback以避免在构建期间setState
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _resetPages();
+            _resetAndRefreshPages();
           });
         }
         
@@ -303,22 +339,58 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
               return const Center(child: CircularProgressIndicator());
             }
             
-            // 使用RepaintBoundary和AnimatedSwitcher实现平滑过渡
+            // 使用缓存的内容或生成新内容
+            Widget pageContent;
+            if (_cachedPageContents.containsKey(index) && _isHandlingPageChange) {
+              pageContent = _cachedPageContents[index]!;
+            } else {
+              pageContent = widget.contentBuilder(context, _pageModels[index]);
+              
+              // 如果是活动页面，缓存内容以备后用
+              if (index == _activePageIndex && _isHandlingPageChange) {
+                _cachedPageContents[index] = pageContent;
+              }
+            }
+            
+            // 使用RepaintBoundary优化重绘，但不再使用AnimatedSwitcher
+            // 因为我们将通过保持内容一致性来避免闪烁
             return RepaintBoundary(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 100),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                child: KeyedSubtree(
-                  key: ValueKey('page_${_pageModels[index].hashCode}'),
-                  child: widget.contentBuilder(context, _pageModels[index]),
-                ),
+              child: KeyedSubtree(
+                key: ValueKey('page_${_pageModels[index].hashCode}_$index'),
+                child: pageContent,
               ),
             );
           },
         );
       },
     );
+  }
+  
+  // 重置并刷新所有页面
+  void _resetAndRefreshPages() {
+    if (!mounted) return;
+    
+    // 首先清除缓存
+    _cachedPageContents.clear();
+    
+    // 然后重置页面模型
+    final mainModel = Provider.of<DateRangeModel>(context, listen: false);
+    
+    _pageModels[_currentPageIndex] = _cloneDateRange(mainModel);
+    _pageModels[_prevPageIndex] = _createPreviousDateRange(mainModel);
+    _pageModels[_nextPageIndex] = _createNextDateRange(mainModel);
+    
+    // 如果页面控制器不在中央页面，重置它
+    if (_pageController.hasClients && 
+        _pageController.page != null && 
+        _pageController.page!.round() != _currentPageIndex) {
+      _pageController.jumpToPage(_currentPageIndex);
+    }
+    
+    // 重置活动页面索引
+    _activePageIndex = _currentPageIndex;
+    
+    // 触发UI更新
+    if (mounted) setState(() {});
   }
 }
