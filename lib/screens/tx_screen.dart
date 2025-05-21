@@ -1,3 +1,4 @@
+// lib/screens/tx_screen.dart
 import 'package:flutter/material.dart';
 import 'package:money_manager/l10n/gen/app_localizations.dart';
 import 'package:money_manager/widgets/edit_tx_sheet.dart';
@@ -8,6 +9,7 @@ import 'package:money_manager/utils/date_formatter.dart';
 import 'package:money_manager/view_models/category_list_model.dart';
 import 'package:money_manager/view_models/date_range_model.dart';
 import 'package:money_manager/widgets/date_range_selector.dart';
+import 'package:money_manager/widgets/swipeable_content_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/view_models/tx_list_model.dart';
 import 'package:money_manager/models/transaction.dart';
@@ -18,31 +20,7 @@ class TransactionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final txListModel = context.watch<TxListModel>();
-    final dateRange = context.watch<DateRangeModel>(); // 获取日期范围
     
-    // 使用日期范围过滤交易记录
-    final List<Transaction> filteredTransactions = txListModel.getFilteredByDateRange(dateRange);
-    final defaultCategory = context.read<CategoryListModel>().getById("other")!;
-
-    // Group transactions by date
-    final Map<String, List<Transaction>> groupedTransactions = {};
-    final Map<String, double> dailyTotals = {};
-
-    for (var tx in filteredTransactions) {
-      final dateKey = DateFormatter.formatDateKey(tx.occurredAt);
-      if (!groupedTransactions.containsKey(dateKey)) {
-        groupedTransactions[dateKey] = [];
-        dailyTotals[dateKey] = 0;
-      }
-      groupedTransactions[dateKey]!.add(tx);
-      dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + tx.amount;
-    }
-
-    // Sort dates in descending order (newest first)
-    final sortedDates = groupedTransactions.keys.toList()
-      ..sort((a, b) => DateFormatter.parseDateKey(b).compareTo(DateFormatter.parseDateKey(a)));
-
     return Scaffold(
       body: Column(
         children: [
@@ -54,30 +32,60 @@ class TransactionScreen extends StatelessWidget {
             ),
           ),
           
-          // transaction list 
+          // Wrap the transaction list with SwipeableContentWrapper
           Expanded(
-            child: filteredTransactions.isEmpty
-                ? Center(child: Text(l10n.noTransactions))
-                : ListView.builder(
-                    itemCount: sortedDates.length,
-                    itemBuilder: (context, index) {
-                      final dateKey = sortedDates[index];
-                      final transactions = groupedTransactions[dateKey]!;
-                      final total = dailyTotals[dateKey] ?? 0.0;
-                      
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Date header with total
-                          _buildDateHeader(context, dateKey, total),
-                          // Transactions for this date
-                          ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
-                          // Add a divider between date groups
-                          const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-                        ],
+            child: SwipeableContentWrapper(
+              child: Consumer<DateRangeModel>(
+                builder: (context, dateRange, _) {
+                  final txListModel = context.watch<TxListModel>();
+                  
+                  // 使用日期范围过滤交易记录
+                  final List<Transaction> filteredTransactions = txListModel.getFilteredByDateRange(dateRange);
+                  final defaultCategory = context.read<CategoryListModel>().getById("other")!;
+
+                  // Group transactions by date
+                  final Map<String, List<Transaction>> groupedTransactions = {};
+                  final Map<String, double> dailyTotals = {};
+
+                  for (var tx in filteredTransactions) {
+                    final dateKey = DateFormatter.formatDateKey(tx.occurredAt);
+                    if (!groupedTransactions.containsKey(dateKey)) {
+                      groupedTransactions[dateKey] = [];
+                      dailyTotals[dateKey] = 0;
+                    }
+                    groupedTransactions[dateKey]!.add(tx);
+                    dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + tx.amount;
+                  }
+
+                  // Sort dates in descending order (newest first)
+                  final sortedDates = groupedTransactions.keys.toList()
+                    ..sort((a, b) => DateFormatter.parseDateKey(b).compareTo(DateFormatter.parseDateKey(a)));
+
+                  return filteredTransactions.isEmpty
+                    ? Center(child: Text(l10n.noTransactions))
+                    : ListView.builder(
+                        itemCount: sortedDates.length,
+                        itemBuilder: (context, index) {
+                          final dateKey = sortedDates[index];
+                          final transactions = groupedTransactions[dateKey]!;
+                          final total = dailyTotals[dateKey] ?? 0.0;
+                          
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Date header with total
+                              _buildDateHeader(context, dateKey, total),
+                              // Transactions for this date
+                              ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
+                              // Add a divider between date groups
+                              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
+                            ],
+                          );
+                        },
                       );
-                    },
-                  ),
+                },
+              ),
+            ),
           ),
         ],
       ),
@@ -88,7 +96,7 @@ class TransactionScreen extends StatelessWidget {
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
             builder: (context) => EditTransactionSheet(
-              category: defaultCategory,
+              category: context.read<CategoryListModel>().getById("other")!,
             ),
           );
         },
