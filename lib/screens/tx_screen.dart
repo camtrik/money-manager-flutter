@@ -63,6 +63,7 @@ class TransactionScreen extends StatelessWidget {
                 return filteredTransactions.isEmpty
                   ? Center(child: Text(l10n.noTransactions))
                   : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: sortedDates.length,
                       itemBuilder: (context, index) {
                         final dateKey = sortedDates[index];
@@ -74,10 +75,15 @@ class TransactionScreen extends StatelessWidget {
                           children: [
                             // Date header with total
                             _buildDateHeader(context, dateKey, total),
-                            // Transactions for this date
-                            ...transactions.map((tx) => _buildTransactionItem(context, tx, txListModel)),
-                            // Add a divider between date groups
-                            const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
+                            // Transactions for this date with improved styling
+                            ...transactions.asMap().entries.map((entry) {
+                              final txIndex = entry.key;
+                              final tx = entry.value;
+                              final isLast = txIndex == transactions.length - 1;
+                              return _buildTransactionItem(context, tx, txListModel, isLast);
+                            }),
+                            // Add spacing between date groups
+                            const SizedBox(height: 16),
                           ],
                         );
                       },
@@ -105,11 +111,10 @@ class TransactionScreen extends StatelessWidget {
 
   Widget _buildDateHeader(BuildContext context, String dateKey, double total) {
     final date = DateFormatter.parseDateKey(dateKey);
-    // final locale = Localizations.localeOf(context).languageCode;
     final dayOfWeek = DateFormatter.getDayOfWeek(context, dateKey);
     final monthYear = DateFormatter.formatMonthYear(context, date);    
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 12),
       child: Row(
         children: [
           Row(
@@ -159,70 +164,108 @@ class TransactionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTransactionItem(BuildContext context, Transaction tx, TxListModel txListModel) {
-    return InkWell(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          builder: (context) => ManageTransactionSheet(tx: tx),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        
-        child: Row(
-          children: [
-            // Category icon
-            CircleAvatar(
-              radius: 24,
-              backgroundColor: Color(tx.category.colorValue),
-              child: Icon(
-                tx.category.icon,
-                color: Colors.white,
-                size: 22,
-              ),
-            ),
-            const SizedBox(width: 16),
-            // Category name and notes
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    CategoryUtils.getLocalizedName(context, tx.category.id, tx.category.name),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  if (tx.notes.isNotEmpty)
-                    Text(
-                      tx.notes,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
-              ),
-            ),
-            // Amount
-            Text(
-              CurrencyFormatter.format(tx.amount, currency: tx.currency),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.pink[300],
-              ),
-            ),
+  Widget _buildTransactionItem(BuildContext context, Transaction tx, TxListModel txListModel, bool isLast) {
+    final categoryColor = Color(tx.category.colorValue);
+    
+    return Container(
+      margin: EdgeInsets.only(bottom: isLast ? 0 : 12),
+      decoration: BoxDecoration(
+        // 使用分类颜色的深浅变化，从深到浅的自然渐变
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            categoryColor.withOpacity(0.8), // 左侧较深
+            categoryColor.withOpacity(0.7), // 左中过渡
+            categoryColor.withOpacity(0.6), // 右中过渡
+            categoryColor.withOpacity(0.5), // 右侧最浅
           ],
+          stops: const [0.0, 0.3, 0.6, 1.0],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        // 使用分类颜色的阴影
+        boxShadow: [
+          BoxShadow(
+            color: categoryColor.withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) => ManageTransactionSheet(tx: tx),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // 白色图标，在深色背景上清晰显示
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    tx.category.icon,
+                    color: Colors.white, // 白色图标在深色背景上
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // 白色文字，在渐变背景上清晰可读
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        CategoryUtils.getLocalizedName(context, tx.category.id, tx.category.name),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                      if (tx.notes.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          tx.notes,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white.withOpacity(0.9), // 稍微透明的白色
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                // 金额直接显示，无额外背景框
+                Text(
+                  CurrencyFormatter.format(tx.amount, currency: tx.currency),
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white, // 白色金额文字
+                    letterSpacing: 0.5, // 增加字符间距让数字更清晰
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
