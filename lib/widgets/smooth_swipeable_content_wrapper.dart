@@ -44,6 +44,12 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
   // 缓存页面内容，防止闪烁
   final Map<int, Widget> _cachedPageContents = {};
   
+  // 添加标志来区分滑动和按钮点击
+  bool _isExternalUpdate = false;
+  
+  // 记录上一次的日期范围状态，用于检测外部变化
+  String _lastDateRangeKey = '';
+  
   @override
   void initState() {
     super.initState();
@@ -52,7 +58,7 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     _pageController = PageController(
       initialPage: _currentPageIndex,
       viewportFraction: 1.0,
-      keepPage: false, // 设置为false以避免保持页面状态导致的闪烁
+      keepPage: false,
     );
     
     // 初始化过渡动画控制器
@@ -87,20 +93,23 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     _mainDateRange = mainModel;
     
     // 为三个页面创建日期范围模型
-    // 当前页面使用主模型的副本
     _pageModels[_currentPageIndex] = _cloneDateRange(mainModel);
-    
-    // 前一页使用"上一个"日期范围
     _pageModels[_prevPageIndex] = _createPreviousDateRange(mainModel);
-    
-    // 后一页使用"下一个"日期范围
     _pageModels[_nextPageIndex] = _createNextDateRange(mainModel);
+    
+    // 初始化日期范围键
+    _lastDateRangeKey = _getDateRangeKey(mainModel);
     
     // 清除缓存的页面内容
     _cachedPageContents.clear();
     
     // 确保UI更新
     if (mounted) setState(() {});
+  }
+  
+  // 生成日期范围的唯一键，用于检测变化
+  String _getDateRangeKey(DateRangeModel model) {
+    return "${model.currentRangeType}_${model.startDate.millisecondsSinceEpoch}_${model.endDate.millisecondsSinceEpoch}";
   }
   
   // 为前一页创建日期范围模型
@@ -148,8 +157,8 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
   
   // 页面滚动更新监听器
   void _onPageScrollUpdate() {
-    // 仅在非处理状态且控制器可用时处理滚动
-    if (_isHandlingPageChange || !_pageController.hasClients) return;
+    // 如果是外部更新，忽略滚动监听
+    if (_isExternalUpdate || _isHandlingPageChange || !_pageController.hasClients) return;
     
     // 获取当前页面位置
     if (!_pageController.position.hasContentDimensions) return;
@@ -165,7 +174,7 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
   
   // 处理页面完全切换时的逻辑
   void _handlePageChange(int pageIndex) {
-    if (_isHandlingPageChange) return;
+    if (_isHandlingPageChange || _isExternalUpdate) return;
     _isHandlingPageChange = true;
     
     // 记录新的活动页面索引
@@ -191,26 +200,22 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
         _applyNextOffset(mainModel);
       }
       
+      // 更新日期范围键
+      _lastDateRangeKey = _getDateRangeKey(mainModel);
+      
       // 通知相关组件
       Provider.of<DateRangeModel>(context, listen: false).notifyListeners();
       
-      // 在数据更新完成后再重置页面，避免视觉闪烁
-      // 关键修改：我们不再使用动画跳转，而是直接跳转，并在跳转前后保持内容一致
+      // 在数据更新完成后再重置页面
       if (mounted && _pageController.hasClients) {
-        // 使用WidgetsBinding确保在视觉更新之后执行跳转
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted || !_pageController.hasClients) {
             _isHandlingPageChange = false;
             return;
           }
           
-          // 重要：在跳转前预先重置页面模型
           _preResetPagesForIndex(pageIndex);
-          
-          // 直接跳转到中央页面，不使用动画
           _pageController.jumpToPage(_currentPageIndex);
-          
-          // 跳转后完成剩余的页面重置
           _completePageReset();
           
           _isHandlingPageChange = false;
@@ -288,11 +293,11 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
       case DateRangeType.week:
         model.nextWeek();
         break;
-      case DateRangeType.month:
-        model.nextMonth();
-        break;
       case DateRangeType.year:
         model.nextYear();
+        break;
+      case DateRangeType.month:
+        model.nextMonth();
         break;
       case DateRangeType.allTime:
         // 全部时间不做偏移
@@ -317,14 +322,24 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     // 监听主日期范围模型的变化
     return Consumer<DateRangeModel>(
       builder: (context, mainDateRange, _) {
-        // 当主模型变化时，如果不是由内部引起的，更新页面
-        if (mainDateRange != _mainDateRange && !_isHandlingPageChange) {
+        // 检测是否是外部触发的变化（比如按钮点击）
+        final currentDateRangeKey = _getDateRangeKey(mainDateRange);
+        final isExternalChange = _lastDateRangeKey.isNotEmpty && 
+                                currentDateRangeKey != _lastDateRangeKey && 
+                                !_isHandlingPageChange;
+        
+        if (isExternalChange) {
+          // 这是外部触发的变化，需要特殊处理
+          _lastDateRangeKey = currentDateRangeKey;
           _mainDateRange = mainDateRange;
           
           // 使用postFrameCallback以避免在构建期间setState
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _resetAndRefreshPages();
+            _handleExternalDateRangeChange();
           });
+        } else if (_lastDateRangeKey.isEmpty) {
+          // 首次初始化
+          _lastDateRangeKey = currentDateRangeKey;
         }
         
         return PageView.builder(
@@ -332,7 +347,7 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
           itemCount: 3, // 固定三页布局
           physics: const PageScrollPhysics(),
           pageSnapping: true,
-          dragStartBehavior: DragStartBehavior.start, // 改善响应性
+          dragStartBehavior: DragStartBehavior.start,
           itemBuilder: (context, index) {
             // 确保模型已正确初始化
             if (_pageModels.length != 3) {
@@ -352,8 +367,6 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
               }
             }
             
-            // 使用RepaintBoundary优化重绘，但不再使用AnimatedSwitcher
-            // 因为我们将通过保持内容一致性来避免闪烁
             return RepaintBoundary(
               child: KeyedSubtree(
                 key: ValueKey('page_${_pageModels[index].hashCode}_$index'),
@@ -366,14 +379,17 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     );
   }
   
-  // 重置并刷新所有页面
-  void _resetAndRefreshPages() {
+  // 处理外部日期范围变化（比如按钮点击）
+  void _handleExternalDateRangeChange() {
     if (!mounted) return;
     
-    // 首先清除缓存
+    // 设置外部更新标志，防止滑动监听干扰
+    _isExternalUpdate = true;
+    
+    // 清除缓存
     _cachedPageContents.clear();
     
-    // 然后重置页面模型
+    // 重置页面模型
     final mainModel = Provider.of<DateRangeModel>(context, listen: false);
     
     _pageModels[_currentPageIndex] = _cloneDateRange(mainModel);
@@ -391,6 +407,13 @@ class _SmoothSwipeableContentState extends State<SmoothSwipeableContent> with Ti
     _activePageIndex = _currentPageIndex;
     
     // 触发UI更新
-    if (mounted) setState(() {});
+    if (mounted) {
+      setState(() {});
+      
+      // 在下一帧清除外部更新标志
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _isExternalUpdate = false;
+      });
+    }
   }
 }
