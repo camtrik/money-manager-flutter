@@ -225,7 +225,7 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        // Header with category type
+                        // Header with category type - 使用渐变风格
                         Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.04,
@@ -236,43 +236,66 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: screenWidth * 0.05,
-                                  vertical: screenHeight * 0.015,
+                                  vertical: screenHeight * 0.018,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Color(_selectedCategory.colorValue).withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(screenWidth * 0.06),
-                                  border: Border.all(
-                                    color: Color(_selectedCategory.colorValue).withValues(alpha: 0.3),
-                                    width: 1,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Color(_selectedCategory.colorValue).withOpacity(0.8), // 左侧较深
+                                      Color(_selectedCategory.colorValue).withOpacity(0.7), // 左中过渡
+                                      Color(_selectedCategory.colorValue).withOpacity(0.6), // 右中过渡
+                                      Color(_selectedCategory.colorValue).withOpacity(0.5), // 右侧最浅
+                                    ],
+                                    stops: const [0.0, 0.3, 0.6, 1.0],
                                   ),
+                                  borderRadius: BorderRadius.circular(16),
+                                  // 添加轻微阴影
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(_selectedCategory.colorValue).withOpacity(0.15),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    CircleAvatar(
-                                      radius: screenWidth * 0.045,
-                                      backgroundColor: Color(_selectedCategory.colorValue).withValues(alpha: 0.2),
+                                    // 图标容器，透明背景融入渐变
+                                    Container(
+                                      width: screenWidth * 0.11,
+                                      height: screenWidth * 0.11,
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent, // 完全透明，融入渐变
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
                                       child: Icon(
                                         _selectedCategory.icon,
-                                        size: screenWidth * 0.045,
+                                        size: screenWidth * 0.055,
+                                        color: Colors.white, // 白色图标
                                       ),
                                     ),
                                     SizedBox(width: screenWidth * 0.03),
+                                    // 分类名称
                                     Flexible(
                                       child: Text(
                                         CategoryUtils.getLocalizedName(context, _selectedCategory.id, _selectedCategory.name),
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: screenWidth * 0.04,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: screenWidth * 0.042,
+                                          color: Colors.white, // 白色文字
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     SizedBox(width: screenWidth * 0.02),
+                                    // 下拉箭头
                                     Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(_selectedCategory.colorValue),
-                                      size: screenWidth * 0.06,
+                                      Icons.keyboard_arrow_down_rounded,
+                                      color: Colors.white.withOpacity(0.9),
+                                      size: screenWidth * 0.07,
                                     ),
                                   ],
                                 ),
@@ -364,10 +387,9 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
                                     _buildCalculatorButton('.', onPressed: _onDecimalPressed),
                                     _buildCalculatorButton('¥', onPressed: () {}),
                                     _buildIconButton(
-                                      Icons.check, 
+                                      Icons.check_rounded, 
                                       onPressed: _saveTransaction,
-                                      backgroundColor: Color(_selectedCategory.colorValue),
-                                      iconColor: Colors.white,
+                                      isCheckButton: true, 
                                     ),
                                   ]),
                                 ],
@@ -481,24 +503,51 @@ class _EditTransactionSheetState extends State<EditTransactionSheet> {
     required VoidCallback onPressed,
     Color? backgroundColor,
     Color? iconColor,
+    bool isCheckButton = false,
   }) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: AspectRatio(
           aspectRatio: 1,
-          child: ElevatedButton(
-            onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: backgroundColor ?? Colors.grey.shade100,
-              foregroundColor: iconColor ?? Colors.black87,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+          child: Container(
+            decoration: isCheckButton ? BoxDecoration(
+              // 使用与分类按钮相同的渐变风格
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Color(_selectedCategory.colorValue).withOpacity(0.8), // 左侧较深
+                  Color(_selectedCategory.colorValue).withOpacity(0.7), // 左中过渡
+                  Color(_selectedCategory.colorValue).withOpacity(0.6), // 右中过渡
+                  Color(_selectedCategory.colorValue).withOpacity(0.5), // 右侧较浅
+                ],
+                stops: const [0.0, 0.3, 0.6, 1.0],
               ),
-              elevation: 0,
-              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.circular(8),
+              // 添加轻微阴影
+              boxShadow: [
+                BoxShadow(
+                  color: Color(_selectedCategory.colorValue).withOpacity(0.2),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ) : null,
+            child: ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isCheckButton ? Colors.transparent : (backgroundColor ?? Colors.grey.shade100),
+                foregroundColor: isCheckButton ? Colors.white : (iconColor ?? Colors.black87),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+                padding: EdgeInsets.zero,
+                shadowColor: Colors.transparent, // 移除按钮自带阴影
+              ),
+              child: Icon(icon, size: 24),
             ),
-            child: Icon(icon, size: 24),
           ),
         ),
       ),
